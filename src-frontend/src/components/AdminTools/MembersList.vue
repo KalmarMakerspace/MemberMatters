@@ -40,6 +40,18 @@
                   <q-item
                     v-close-popup
                     clickable
+                    @click="importDialogOpen = true"
+                  >
+                    <q-item-section>
+                      <q-item-label>{{
+                        $t('adminTools.importCsv')
+                      }}</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item
+                    v-close-popup
+                    clickable
                     @click="copyEmailsToClipboard"
                   >
                     <q-item-section>
@@ -71,6 +83,13 @@
               :icon="icons.export"
               :label="$t('adminTools.exportCsv')"
               @click="exportCsv"
+            />
+            <q-btn
+              class="q-mr-sm q-mb-sm"
+              color="primary"
+              :icon="icons.upload"
+              :label="$t('adminTools.importCsv')"
+              @click="importDialogOpen = true"
             />
             <q-btn
               class="q-mr-sm q-mb-sm"
@@ -108,6 +127,39 @@
         </q-input>
       </template>
     </q-table>
+
+    <q-dialog v-model="importDialogOpen" persistent>
+      <q-card style="min-width: 400px">
+        <q-card-section>
+          <div class="text-h6">{{ $t('adminTools.importCsv') }}</div>
+          <div class="text-caption q-mt-xs">
+            {{ $t('adminTools.importCsvDescription') }}
+          </div>
+        </q-card-section>
+        <q-card-section>
+          <q-file
+            v-model="importFile"
+            accept=".csv"
+            outlined
+            :label="$t('adminTools.importCsvFileLabel')"
+          />
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn
+            flat
+            :label="$t('button.cancel')"
+            @click="importDialogOpen = false; importFile = null"
+          />
+          <q-btn
+            color="primary"
+            :label="$t('button.import')"
+            :loading="importLoading"
+            :disable="!importFile"
+            @click="importCsv"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -130,6 +182,9 @@ export default defineComponent({
       filter: '',
       memberState: 'active',
       loading: false,
+      importDialogOpen: false,
+      importFile: null,
+      importLoading: false,
       pagination: {
         sortBy: 'date',
         descending: true,
@@ -251,6 +306,52 @@ export default defineComponent({
           }
         }
       );
+    },
+    importCsv() {
+      if (!this.importFile) return;
+      this.importLoading = true;
+      const formData = new FormData();
+      formData.append('file', this.importFile);
+      this.$axios
+        .post('/api/admin/members/import/', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+        .then((response) => {
+          const { created, updated, errors } = response.data;
+          let message = this.$t('adminTools.importCsvSuccess', {
+            created,
+            updated,
+          });
+          if (errors.length) {
+            message +=
+              '\n\n' +
+              this.$t('adminTools.importCsvErrors', { count: errors.length }) +
+              '\n' +
+              errors
+                .map(
+                  (e: { row: number; email?: string; error: string }) =>
+                    `Row ${e.row}${e.email ? ` (${e.email})` : ''}: ${e.error}`
+                )
+                .join('\n');
+          }
+          this.$q.dialog({
+            title: this.$t('adminTools.importCsvResultTitle'),
+            message,
+            style: 'white-space: pre-wrap',
+          });
+          this.importDialogOpen = false;
+          this.importFile = null;
+          this.getMembers();
+        })
+        .catch(() => {
+          this.$q.dialog({
+            title: this.$t('error.error'),
+            message: this.$t('error.requestFailed'),
+          });
+        })
+        .finally(() => {
+          this.importLoading = false;
+        });
     },
     copyEmailsToClipboard() {
       copyToClipboard(this.memberEmails)

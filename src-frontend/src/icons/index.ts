@@ -64,6 +64,7 @@ export default {
   members: 'mdi-account-supervisor-circle',
   membersOnSite: 'mdi-contacts',
   export: 'mdi-archive',
+  upload: 'mdi-upload',
   email: 'mdi-email-multiple',
   sync: 'mdi-sync',
   reboot: 'mdi-power',
