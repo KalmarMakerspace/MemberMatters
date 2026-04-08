@@ -1009,10 +1009,14 @@ class ImportMembers(APIView):
                 errors.append({"row": i, "error": "Missing email."})
                 continue
             if not first_name or not last_name or not screen_name:
-                errors.append({"row": i, "email": email, "error": "Missing required field(s)."})
+                errors.append(
+                    {"row": i, "email": email, "error": "Missing required field(s)."}
+                )
                 continue
             if state not in VALID_STATES:
-                errors.append({"row": i, "email": email, "error": f"Invalid state '{state}'."})
+                errors.append(
+                    {"row": i, "email": email, "error": f"Invalid state '{state}'."}
+                )
                 continue
 
             try:
