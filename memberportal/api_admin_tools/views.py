@@ -1056,7 +1056,15 @@ class ImportMembers(APIView):
                     updated += 1
 
             except Exception as e:
-                errors.append({"row": i, "email": email, "error": str(e)})
+                # Log the full exception details server-side and return a generic message to the client
+                capture_exception(e)
+                errors.append(
+                    {
+                        "row": i,
+                        "email": email,
+                        "error": "An unexpected error occurred while processing this row.",
+                    }
+                )
 
         return Response(
             {
