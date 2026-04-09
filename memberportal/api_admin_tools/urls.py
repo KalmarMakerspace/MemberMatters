@@ -98,4 +98,9 @@ urlpatterns = [
         views.ManageSettings.as_view(),
         name="ManageSettings",
     ),
+    path(
+        "api/admin/members/import/",
+        views.ImportMembers.as_view(),
+        name="ImportMembers",
+    ),
 ]

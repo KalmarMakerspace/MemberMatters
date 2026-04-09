@@ -151,6 +151,7 @@ export default {
     back: 'Back',
     contactUs: 'Contact Us',
     startInduction: 'Start Onboarding Induction',
+    import: 'Import',
   },
   loginCard: {
     login: 'Login',
@@ -427,6 +428,13 @@ export default {
       'Simply paste them into your email client to use them. We recommend using the BCC field to protect your members privacy. Excluded {n} @:member who you have opted out of email exports.',
     exportCsv: 'Export CSV',
     exportOptions: 'Export Options',
+    importCsv: 'Import CSV',
+    importCsvDescription:
+      'Upload a CSV file with columns: email, first_name, last_name, screen_name (required); phone, rfid, state (optional). Existing members matched by email will be updated.',
+    importCsvFileLabel: 'Select CSV file',
+    importCsvResultTitle: 'Import Complete',
+    importCsvSuccess: 'Created {created} new member(s), updated {updated} existing member(s).',
+    importCsvErrors: '{count} row(s) had errors:',
     filterOptions: 'Filter',
     all: 'All',
     active: 'Active',

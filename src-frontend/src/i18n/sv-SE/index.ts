@@ -150,6 +150,7 @@ export default {
     back: 'Tillbaka',
     contactUs: 'Kontakta oss',
     startInduction: 'Börja introduktion',
+    import: 'Importera',
   },
   loginCard: {
     login: 'Login',
@@ -426,6 +427,13 @@ export default {
       'Klistra in i din email-app för att använda. Vi rekommenderar att skicka som BCC för att skydda dina medlemmars integritet. Exkluderade {n} @:member som har valt att avstå email exports.',
     exportCsv: 'Export CSV',
     exportOptions: 'Export Options',
+    importCsv: 'Importera CSV',
+    importCsvDescription:
+      'Ladda upp en CSV-fil med kolumner: email, first_name, last_name, screen_name (obligatoriska); phone, rfid, state (valfria). Befintliga medlemmar som matchar på email uppdateras.',
+    importCsvFileLabel: 'Välj CSV-fil',
+    importCsvResultTitle: 'Import klar',
+    importCsvSuccess: 'Skapade {created} ny(a) medlem(mar), uppdaterade {updated} befintliga.',
+    importCsvErrors: '{count} rad(er) hade fel:',
     filterOptions: 'Filter',
     all: 'Alla',
     active: 'Aktiva',
