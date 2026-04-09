@@ -37,7 +37,7 @@
     "address": "^1.1.2",
     "animate.css": "^4.1.1",
     "apexcharts": "^3.49.1",
-    "axios": "^0.26.1",
+    "axios": "^1.13.5",
     "core-js": "^3.22.2",
     "crypto-js": "^4.1.1",
     "csv-stringify": "^6.5.1",
