@@ -39,4 +39,4 @@ jobs:
           file: docker/Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/membermatters:dev,ghcr.io/${{ github.repository_owner }}/membermatters:${{github.sha}}
+          tags: ghcr.io/kalmarmakerspace/membermatters:dev,ghcr.io/kalmarmakerspace/membermatters:${{github.sha}}
