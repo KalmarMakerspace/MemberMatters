@@ -14,27 +14,43 @@ jobs:
       branch: ${{ steps.extract_branch.outputs.branch }}
       repoowner: ${{ steps.extract_repo_owner.outputs.repoowner }}
       imagename: ${{ steps.extract_image_name.outputs.imagename }}
+
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Extract branch name
         shell: bash
         run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" | tr / - >> $GITHUB_OUTPUT
         id: extract_branch
+
       - name: Extract repo owner
         shell: bash
         run: echo "repoowner=${{ github.event.pull_request.head.repo.owner.login }}" | tr / - >> $GITHUB_OUTPUT
         id: extract_repo_owner
+
       - name: Generate image name
         shell: bash
-        run: echo "imagename=membermatters/membermatters:untrusted-pr-image-${{steps.extract_repo_owner.outputs.repoowner}}-${{ steps.extract_branch.outputs.branch }}" >> $GITHUB_OUTPUT
+        run: echo "imagename=ghcr.io/kalmarmakerspace/membermatters:untrusted-pr-image-${{steps.extract_repo_owner.outputs.repoowner}}-${{ steps.extract_branch.outputs.branch }}" >> $GITHUB_OUTPUT
         id: extract_image_name
+
       - name: Save PR number and branch/image name
         run: |
           mkdir -p ./pr
           echo ${{ github.event.number }} > ./pr/prnumber
           echo ${{ steps.extract_branch.outputs.branch }} > ./pr/branchname
           echo ${{ steps.extract_image_name.outputs.imagename }} > ./pr/imagename
+
       - name: Build pr image
         id: docker_build
         uses: docker/build-push-action@v6
@@ -43,6 +59,7 @@ jobs:
           outputs: type=docker,dest=./pr/untrusted-pr-image.tar
           file: docker/Dockerfile
           platforms: linux/amd64
+          
       - name: Upload pr image as artifact
         uses: actions/upload-artifact@v4
         with:
