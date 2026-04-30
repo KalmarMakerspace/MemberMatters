@@ -228,11 +228,11 @@ class Login(APIView):
 
                 url = f"{config.SITE_URL}/profile/email/{new_token.verification_token}/verify/"
                 new_token.user.email_link(
-                    "Action Required: Verify Email",
-                    "Verify Email",
-                    "Please verify your email address to activate your account.",
+                    "Verifiera din Email",
+                    "Verifiera Email",
+                    "Verifiera din email adress för att aktivera ditt konto.",
                     url,
-                    "Verify Now",
+                    "Verifiera Nu",
                 )
 
                 return Response(
@@ -674,11 +674,11 @@ class Register(APIView):
 
         url = f"{config.SITE_URL}/profile/email/{verification_token.verification_token}/verify/"
         verification_token.user.email_link(
-            "Action Required: Verify Email",
-            "Verify Email",
-            "Please verify your email address to activate your account.",
+            "Verifiera din Email",
+            "Verifiera Email",
+            "Verifiera din email adress för att aktivera ditt konto.",
             url,
-            "Verify Now",
+            "Verifiera Nu",
         )
 
         profile.email_profile_to(config.EMAIL_ADMIN)
@@ -778,11 +778,11 @@ class VerifyEmail(APIView):
 
             url = f"{config.SITE_URL}/profile/email/{new_token.verification_token}/verify/"
             new_token.user.email_link(
-                "Action Required: Verify Email",
-                "Verify Email",
-                "Please verify your email address to activate your account.",
+                "Verifiera din Email",
+                "Verifiera Email",
+                "Verifiera din email adress för att aktivera ditt konto.",
                 url,
-                "Verify Now",
+                "Verifiera Nu",
             )
 
             verification_token.delete()

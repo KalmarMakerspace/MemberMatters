@@ -1,5 +1,3 @@
-import csv
-import io
 import json
 
 import stripe
@@ -24,7 +22,7 @@ from memberbucks.models import (
     MemberBucks,
     MemberbucksProductPurchaseLog,
 )
-from profile.models import User, UserEventLog, Profile
+from profile.models import User, UserEventLog
 from services import sms
 from services.emails import send_email_to_admin
 from .models import MemberTier, PaymentPlan
@@ -117,7 +115,7 @@ class MakeMember(APIView):
             # mark them as "active"
             user.profile.activate()
 
-            subject = f"{user.profile.get_full_name()} just got turned into a member!"
+            subject = f"{user.profile.get_full_name()} blev labbmedlem nu!"
             send_email_to_admin(
                 subject=subject,
                 template_vars={"title": subject, "message": subject},
@@ -942,134 +940,3 @@ class ManageSettings(APIView):
 
         except ConstanceSetting.DoesNotExist as e:
             return Response(status=status.HTTP_404_NOT_FOUND)
-
-
-IMPORT_REQUIRED_COLUMNS = {"email", "first_name", "last_name", "screen_name"}
-IMPORT_OPTIONAL_COLUMNS = {"phone", "rfid", "state"}
-VALID_STATES = {"noob", "active", "inactive", "accountonly"}
-
-
-class ImportMembers(APIView):
-    """
-    post: Import members from a CSV file.
-
-    Required columns: email, first_name, last_name, screen_name
-    Optional columns: phone, rfid, state (noob/active/inactive/accountonly)
-
-    Existing members (matched by email) will be updated. New members are
-    created with an unusable password (login via password reset only).
-    No emails are sent.
-    """
-
-    permission_classes = (permissions.IsAdminUser,)
-
-    def post(self, request):
-        csv_file = request.FILES.get("file")
-        if not csv_file:
-            return Response(
-                {"error": "No file uploaded."}, status=status.HTTP_400_BAD_REQUEST
-            )
-
-        try:
-            # utf-8-sig strips a BOM if present (common in Excel exports)
-            text = csv_file.read().decode("utf-8-sig")
-        except UnicodeDecodeError:
-            return Response(
-                {"error": "File must be UTF-8 encoded."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        reader = csv.DictReader(io.StringIO(text))
-
-        # Strip whitespace from column names to handle trailing spaces
-        if reader.fieldnames:
-            reader.fieldnames = [f.strip() for f in reader.fieldnames]
-
-        if not IMPORT_REQUIRED_COLUMNS.issubset(set(reader.fieldnames or [])):
-            missing = IMPORT_REQUIRED_COLUMNS - set(reader.fieldnames or [])
-            return Response(
-                {"error": f"Missing required columns: {', '.join(sorted(missing))}"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        created = 0
-        updated = 0
-        errors = []
-
-        for i, row in enumerate(reader, start=2):  # row 1 is the header
-            email = row.get("email", "").strip().lower()
-            first_name = row.get("first_name", "").strip()
-            last_name = row.get("last_name", "").strip()
-            screen_name = row.get("screen_name", "").strip()
-            phone = row.get("phone", "").strip()
-            rfid = row.get("rfid", "").strip() or None
-            state = row.get("state", "noob").strip() or "noob"
-
-            if not email:
-                errors.append({"row": i, "error": "Missing email."})
-                continue
-            if not first_name or not last_name or not screen_name:
-                errors.append(
-                    {"row": i, "email": email, "error": "Missing required field(s)."}
-                )
-                continue
-            if state not in VALID_STATES:
-                errors.append(
-                    {"row": i, "email": email, "error": f"Invalid state '{state}'."}
-                )
-                continue
-
-            try:
-                user, user_created = User.objects.get_or_create(
-                    email=email,
-                    defaults={"email": email},
-                )
-                if user_created:
-                    user.set_unusable_password()
-                    user.save()
-
-                profile, _ = Profile.objects.get_or_create(
-                    user=user,
-                    defaults={
-                        "first_name": first_name,
-                        "last_name": last_name,
-                        "screen_name": screen_name,
-                        "phone": phone,
-                        "rfid": rfid,
-                        "state": state,
-                    },
-                )
-                if not _:
-                    profile.first_name = first_name
-                    profile.last_name = last_name
-                    profile.screen_name = screen_name
-                    if phone:
-                        profile.phone = phone
-                    if rfid:
-                        profile.rfid = rfid
-                    profile.state = state
-                    profile.save()
-
-                if user_created:
-                    created += 1
-                else:
-                    updated += 1
-
-            except Exception as e:
-                # Log the full exception details server-side and return a generic message to the client
-                capture_exception(e)
-                errors.append(
-                    {
-                        "row": i,
-                        "email": email,
-                        "error": "An unexpected error occurred while processing this row.",
-                    }
-                )
-
-        return Response(
-            {
-                "created": created,
-                "updated": updated,
-                "errors": errors,
-            }
-        )

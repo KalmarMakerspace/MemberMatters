@@ -20,6 +20,7 @@ from services.emails import send_single_email, send_email_to_admin
 from services import sms
 from django_prometheus.models import ExportModelOperationsMixin
 
+
 logger = logging.getLogger("profile")
 
 utc = pytz.UTC
@@ -261,7 +262,7 @@ class User(ExportModelOperationsMixin("user"), AbstractBaseUser, PermissionsMixi
         )
         cards = json.loads(cards)
 
-        subject = f"Welcome to {config.SITE_OWNER}"
+        subject = f"Välkommen till {config.SITE_OWNER}"
         template_vars = {"title": subject, "cards": cards}
 
         if self.__send_email(
@@ -275,14 +276,14 @@ class User(ExportModelOperationsMixin("user"), AbstractBaseUser, PermissionsMixi
 
     def email_disable_member(self):
         return self.email_notification(
-            f"Your {config.SITE_OWNER} site access has been disabled.",
-            f"Your access to {config.SITE_OWNER} has been disabled. This could be due to many reasons, but is "
-            f"usually due to a failed membership payment. If this is unexpected, please let us know.",
+            f"Din tillgång till {config.SITE_OWNER} lokalen har blivit inaktiverad.",
+            f"Din tillgång till {config.SITE_OWNER} har blivit inaktiverad. Detta kan ha flera anledningar, men beror "
+            f"oftast på att betalning av labbmedlemsskap har misslyckats. Om detta är oväntat, vänligen kontakta oss.",
         )
 
     def email_enable_member(self):
-        message = f"Great news {self.profile.first_name}, your {config.SITE_OWNER} site access has been enabled."
-        subject = f"Your {config.SITE_OWNER} site access has been enabled."
+        message = f"Hej {self.profile.first_name}, din tillgång till {config.SITE_OWNER} lokalen har aktiverats."
+        subject = f"Tillgång till {config.SITE_OWNER} aktiverad."
 
         return self.email_notification(subject, message)
 
@@ -473,11 +474,11 @@ class Profile(ExportModelOperationsMixin("profile"), models.Model):
 
     def email_profile_to(self, to_email: str):
         message = (
-            f"{self.get_full_name()} has just signed up on the portal."
-            f"Their email is {self.user.email}."
+            f"{self.get_full_name()} har just registrerat sig i medlemsportalen."
+            f"Med email {self.user.email}."
         )
-        template_vars = {"title": "New member signup", "message": message}
-        subject = "A new member signed up! ({})".format(self.get_full_name())
+        template_vars = {"title": "Ny medlem registrerad", "message": message}
+        subject = "En ny medlem har registrerat sig! ({})".format(self.get_full_name())
 
         return send_single_email(
             to_email,

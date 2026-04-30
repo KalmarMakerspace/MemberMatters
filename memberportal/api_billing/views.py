@@ -151,14 +151,14 @@ class MemberBucksAddCard(StripeAPIView):
             },
         )
 
-        subject = f"You just added a payment card to your {config.SITE_OWNER} account."
+        subject = f"Du har precis lagt till ett betalkort till ditt {config.SITE_OWNER} konto."
 
         try:
             request.user.email_notification(
                 subject,
-                "Don't worry, your card details are stored safe "
-                "with Stripe and are not on our servers. You "
-                "can remove this card at any time via the "
+                "Dina kortdetaljer är säkert lagrade hos Stripe "
+                "och finns inte lagrat i vårt system. Du "
+                "kan ta bort detta kort när du vill via "
                 f"{config.SITE_NAME}.",
             )
         except Exception as e:
@@ -590,7 +590,7 @@ class PaymentPlanResumeCancel(StripeAPIView):
                 if not modified_subscription.cancel_at_period_end:
                     request.user.profile.subscription_status = "active"
                     request.user.profile.save()
-                    subject = f"{request.user.get_full_name()} resumed their cancelling membership plan."
+                    subject = f"{request.user.get_full_name()} har återtagit sin begäran om att avbryta sitt labbmedlemskap."
                     send_email_to_admin(
                         subject=subject,
                         template_vars={
@@ -607,7 +607,7 @@ class PaymentPlanResumeCancel(StripeAPIView):
                     return Response({"success": True})
 
                 else:
-                    subject = f"{request.user.get_full_name()} tried to resume their cancelling membership plan but it failed."
+                    subject = f"{request.user.get_full_name()} försökte återuppta sitt avbrutna labbmedlemskap men det misslyckades."
                     send_email_to_admin(
                         subject=subject,
                         template_vars={
@@ -631,8 +631,8 @@ class PaymentPlanResumeCancel(StripeAPIView):
                 if modified_subscription.cancel_at_period_end == True:
                     request.user.profile.subscription_status = "cancelling"
                     request.user.profile.save()
-                    subject = f"{request.user.get_full_name()} requested to cancel their membership plan."
-                    description = "No further action is required, the subscription will automatically cancel at the end of the current billing period."
+                    subject = f"{request.user.get_full_name()} har sagt upp sitt labbmedlemskap."
+                    description = "Ingen åtgärd behövs, abonnemanget kommer automatiskt att avslutas när betalperioden tar slut."
 
                     send_email_to_admin(
                         subject=subject,
@@ -644,8 +644,8 @@ class PaymentPlanResumeCancel(StripeAPIView):
                         reply_to=request.user.email,
                     )
 
-                    subject = "You've requested to cancel your membership plan."
-                    description = "No further action is required, the subscription will automatically cancel at the end of the current billing period. You can cancel this request at any time from the member portal."
+                    subject = "Du har begärt att avbryta ditt labbmedlemsskap."
+                    description = "Ingen ytterligare åtgärd behövs, abonnemanget kommer automatiskt att avslutas när betalperioden tar slut. Du kan återuppta ditt medlemskap när som helst från medlemsportalen."
                     request.user.email_notification(subject, description)
 
                     request.user.log_event(
@@ -655,13 +655,13 @@ class PaymentPlanResumeCancel(StripeAPIView):
                     return Response({"success": True})
 
                 else:
-                    subject = f"{request.user.get_full_name()} requested to cancel their membership plan but it failed."
+                    subject = f"{request.user.get_full_name()} försökte avbryta sitt labbmedlemskap men det misslyckades."
 
                     send_email_to_admin(
                         subject=subject,
                         template_vars={
                             "title": subject,
-                            "message": "We're not sure what happened, you should check Stripe and contact the member.",
+                            "message": "Det är oklart vad som hände, du bör kontrollera Stripe och sen kontakta medlemmen.",
                         },
                         user=request.user,
                         reply_to=request.user.email,
@@ -737,11 +737,11 @@ class StripeWebhook(StripeAPIView):
                 and member_profile.can_signup()["success"]
                 and invoice_status == "paid"
             ):
-                subject = "Your payment was successful."
+                subject = "Din betalning lyckades."
                 message = (
-                    "Thanks for making a membership payment using our online payment system. "
-                    "You've already met all of the requirements for activating your site access. Please check "
-                    "for another email message confirming this was successful."
+                    "Tack för att du betalat för ditt labbmedlemskap via vår medlemsportal. "
+                    "Du har uppfyllt alla krav för att aktivera din åtkomst till lokalerna. "
+                    "Du skall strax även få en mail-bekräftelse om att detta lyckades."
                 )
                 member_profile.user.email_notification(subject, message)
 
@@ -761,12 +761,12 @@ class StripeWebhook(StripeAPIView):
             # then we need to let them know and mark the subscription as active
             # (this could be a new OR returning member that's been too long since induction etc.)
             elif member_profile.state != "active" and invoice_status == "paid":
-                subject = "Your payment was successful."
+                subject = "Din betalning lyckades."
                 message = (
-                    "Thanks for making a membership payment using our online payment system. "
-                    "You haven't yet met all of the requirements for automatically activating your site access. "
-                    "You'll receive confirmation that your site access is enabled soon, or we'll be in touch. "
-                    "If you don't hear from us soon or require assistance, please contact us."
+                    "Tack för att du betalat för ditt labbmedlemskap via vår medlemsportal. "
+                    "Du har inte ännu uppfyllt alla krav för att automatiskt aktivera din åtkomst till lokalerna. "
+                    "Du kommer snart att få en bekräftelse om att din åtkomst är aktiverad, eller så kommer vi kontakta dig. "
+                    "Om du inte hör från oss snart eller behöver hjälp, vänligen kontakta oss."
                 )
                 member_profile.user.email_notification(subject, message)
 
@@ -776,14 +776,19 @@ class StripeWebhook(StripeAPIView):
                 # if this is a returning member then send the exec an email (new members have
                 # already had this sent)
                 if member_profile.state != "noob":
-                    subject = "Action Required: Verify returning member"
+                    subject = "Behöver hanteras: Kontrollera medlem"
                     title = subject
                     message = (
-                        "An existing member (or someone who clicked 'skip signup I just want an account') "
-                        "has setup a membership subscription. You must now decide whether to enable their site access."
+                        "En existerande medlem (eller någon som klickat 'skip signup I just want an account') "
+                        "har köpt labbmedlemsskap. Du måste nu bestämma om du vill aktivera medlemmens åtkomst."
                     )
                     send_email_to_admin(
-                        subject, title, message, reply_to=member_profile.user.email
+                        subject,
+                        template_vars={
+                            "title": title,
+                            "message": message,
+                        },
+                        reply_to=member_profile.user.email,
                     )
 
                 member_profile.user.log_event(
@@ -794,12 +799,12 @@ class StripeWebhook(StripeAPIView):
             # in all other instances, we don't care about a paid invoice and can ignore it
 
         if event_type == "invoice.payment_failed":
-            subject = "Your membership payment failed"
+            subject = "Din betalning för labbmedlemsskapet misslyckades."
             message = (
-                "Hi there, we tried to collect your membership payment but "
-                "weren't successful. Please update your billing method or contact "
-                "us if you need more time. We'll try again a few times, but if we're unable to "
-                "collect your payment soon, your membership may be cancelled."
+                "Hej, vi har försökt att ta betalt för ditt labbmedlemskap men "
+                "misslyckats. Vänligen kontrolleradin betalningsmetod. "
+                "Vi kommer att försöka igen några gånger, men om vi inte lyckas "
+                "ta betalt genom dessa försök, så kommer ditt labbmedlemskap att avslutas."
             )
 
             member_profile.user.email_notification(subject, message)
@@ -807,10 +812,10 @@ class StripeWebhook(StripeAPIView):
 
         if event_type == "customer.subscription.deleted":
             # the subscription was deleted, so deactivate the member
-            subject = "Your membership has been cancelled"
+            subject = "Ditt labbmedlemskap har avslutats."
             message = (
-                "You will receive another email shortly confirming that your access has been deactivated. Your "
-                "membership was cancelled because we couldn't collect your payment, or you chose not to renew it."
+                "Du kommer att få ett nytt e-postmeddelande snart som bekräftar att din åtkomst till lokalerna har stängts av. "
+                "Ditt labbmedlemskap har avslutats eftersom vi inte kunde ta betalt, eller så valde du att inte förnya det."
             )
 
             member_profile.deactivate()
@@ -825,11 +830,11 @@ class StripeWebhook(StripeAPIView):
                 "Membership was cancelled due to Stripe subscription ending", "stripe"
             )
 
-            subject = f"The membership for {member_profile.get_full_name()} was just cancelled"
+            subject = f"Labbmedlemsskapet för {member_profile.get_full_name()} har avslutats"
             title = subject
             message = (
-                f"The Stripe subscription for {member_profile.get_full_name()} ended, so their membership has "
-                f"been cancelled. Their site access has been turned off."
+                f"Stripe-abonnemanget för {member_profile.get_full_name()} har avslutats, så labbmedlemskapet har "
+                f"avslutats. Åtkomst till lokalerna har stängts av."
             )
             template_vars = {"title": title, "message": message}
 
