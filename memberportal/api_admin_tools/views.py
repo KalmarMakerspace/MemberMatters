@@ -117,7 +117,7 @@ class MakeMember(APIView):
             # mark them as "active"
             user.profile.activate()
 
-            subject = f"{user.profile.get_full_name()} just got turned into a member!"
+            subject = f"{user.profile.get_full_name()} blev labbmedlem nu!"
             send_email_to_admin(
                 subject=subject,
                 template_vars={"title": subject, "message": subject},
