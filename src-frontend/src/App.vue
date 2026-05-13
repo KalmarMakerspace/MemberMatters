@@ -36,7 +36,7 @@ export default defineComponent({
     };
   },
   computed: {
-    ...mapGetters('config', ['siteName', 'keys', 'features', 'theme']),
+    ...mapGetters('config', ['siteName', 'keys', 'features', 'theme', 'images']),
     ...mapGetters('profile', ['loggedIn']),
     ...mapGetters('auth', ['refreshToken']),
   },
@@ -118,6 +118,13 @@ export default defineComponent({
     ...mapActions('config', ['getSiteConfig', 'getKioskId', 'pushKioskId']),
     ...mapActions('profile', ['getProfile']),
     ...mapMutations('auth', ['setAuth']),
+    updateFavicon() {
+      const url = this.images?.siteFavicon;
+      if (!url) return;
+      document.querySelectorAll("link[rel~='icon']").forEach((el) => {
+        el.href = url;
+      });
+    },
     updatePageTitle() {
       const pageTitle = this.$route.meta.title;
       const nameKey = pageTitle
@@ -134,6 +141,7 @@ export default defineComponent({
             setCssVar('primary', this.theme?.themePrimary || '#278ab0');
             setCssVar('secondary', this.theme?.themeToolbar || '#0461b1');
             setCssVar('accent', this.theme?.themeAccent || '#189ab4');
+            this.updateFavicon();
             resolve();
           })
           .catch((e) => {
