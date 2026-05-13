@@ -5,6 +5,18 @@
         {{ $t('reportIssue.pageDescription') }}
       </h6>
 
+      <q-banner
+        v-if="!features.enableReportIssue"
+        inline-actions
+        rounded
+        class="bg-orange text-white q-ma-md"
+      >
+        <template v-slot:avatar>
+          <q-icon :name="icons.warning" />
+        </template>
+        {{ $t('reportIssue.disabled') }}
+      </q-banner>
+
       <q-card-section>
         <q-form ref="form" class="q-gutter-md" @submit="onSubmit">
           <q-input

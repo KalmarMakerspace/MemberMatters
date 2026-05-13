@@ -121,6 +121,10 @@ CONSTANCE_CONFIG = {
         "Enable integration with stripe for membership payments.",
     ),
     # ==== Report Issue Services ====
+    "ENABLE_REPORT_ISSUE": (
+        False,
+        "Enable the report issue feature in the portal.",
+    ),
     # Email config
     "REPORT_ISSUE_ENABLE_EMAIL": (
         True,
@@ -159,7 +163,7 @@ CONSTANCE_CONFIG = {
     "TRELLO_API_TOKEN": ("", "Set this to your Trello API token."),
     "TRELLO_ID_LIST": (
         "",
-        "Set this to the ID of your card list you want issue " "to go to.",
+        "Set this to the ID of your card list you want issue to go to.",
     ),
     # Space API config
     "ENABLE_SPACE_DIRECTORY": (
@@ -411,6 +415,7 @@ CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
             (
                 "ENABLE_WEBCAMS",
                 "ENABLE_PROXY_VOTING",
+                "ENABLE_REPORT_ISSUE",
                 "ENABLE_STRIPE",
                 "ENABLE_STRIPE_MEMBERSHIP_PAYMENTS",
                 "ENABLE_MEMBERBUCKS",
