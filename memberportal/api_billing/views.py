@@ -151,7 +151,7 @@ class MemberBucksAddCard(StripeAPIView):
             },
         )
 
-        subject = f"Du har precis lagt till ett betalkort till ditt {config.SITE_OWNER} konto."
+        subject = f"Du har lagt till ett betalkort till ditt {config.SITE_OWNER} konto."
 
         try:
             request.user.email_notification(
@@ -802,7 +802,7 @@ class StripeWebhook(StripeAPIView):
             subject = "Din betalning för labbmedlemsskapet misslyckades."
             message = (
                 "Hej, vi har försökt att ta betalt för ditt labbmedlemskap men "
-                "misslyckats. Vänligen kontrolleradin betalningsmetod. "
+                "misslyckats. Vänligen kontrollera din betalningsmetod. "
                 "Vi kommer att försöka igen några gånger, men om vi inte lyckas "
                 "ta betalt genom dessa försök, så kommer ditt labbmedlemskap att avslutas."
             )
