@@ -147,7 +147,7 @@ const PageAndRouteConfig: PageAndRouteConfigType[] = [
     icon: icons.tools,
     name: 'memberTools',
     loggedIn: true,
-    admin: true, 
+    admin: true,
     kiosk: true,
     memberOnly: true,
     children: [
@@ -158,6 +158,7 @@ const PageAndRouteConfig: PageAndRouteConfigType[] = [
         loggedIn: true,
         admin: true,
         kiosk: true,
+        featureEnabledFlag: 'enableReportIssue',
         component: () => import('pages/ReportIssue.vue'),
       },
       {
