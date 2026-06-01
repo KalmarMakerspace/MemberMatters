@@ -24,6 +24,7 @@
             filled
             type="text"
             label="Issue Title"
+            :disable="!features.enableReportIssue"
             lazy-rules
             :rules="[
               (val) => validateNotEmpty(val) || $t('validation.cannotBeEmpty'),
@@ -40,6 +41,7 @@
             type="textarea"
             label="Issue Description"
             autogrow
+            :disable="!features.enableReportIssue"
             lazy-rules
             :rules="[
               (val) => validateNotEmpty(val) || $t('validation.cannotBeEmpty'),
@@ -68,6 +70,7 @@
               type="submit"
               color="primary-btn"
               :loading="buttonLoading"
+              :disable="!features.enableReportIssue"
             />
           </div>
         </q-form>
@@ -77,6 +80,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import formMixin from '../mixins/formMixin';
 import icons from '../icons';
 
@@ -94,6 +98,7 @@ export default {
     };
   },
   computed: {
+    ...mapGetters('config', ['features']),
     icons() {
       return icons;
     },
