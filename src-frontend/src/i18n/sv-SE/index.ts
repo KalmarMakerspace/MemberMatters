@@ -4,12 +4,12 @@
 export default {
   menuLink: {
     rootIndex: 'Dashboard',
-    dashboard: 'Dashboard',
+    dashboard: 'Startsida',
     webcams: 'Webcams',
-    adminTools: 'Admin Tools',
+    adminTools: 'Administratörsverktyg',
     login: 'Login',
     resetPassword: 'Återställ Lösenord',
-    logout: 'Logout',
+    logout: 'Logga ut',
     register: 'Registrering',
     registerSuccess: 'Lyckade registrering',
     manageTiers: 'Medlemskapsnivåer',
@@ -19,22 +19,22 @@ export default {
 
     meetings: 'Möten',
     members: 'Medlemmar', // for routes
-    manageMember: 'hantera Medlem',
+    manageMember: 'Hantera Medlem',
     doors: 'Dörrar',
     manageDoor: 'Hantera Dörrar',
     manageInterlock: 'Hantera  Lås',
     manageDevice: 'Hantera Enheter',
     interlocks: 'Lås',
     devices: 'Enheter',
-    kiosks: 'Kiosks',
+    kiosks: 'Kiosker',
 
     memberTools: 'Medlemsverktyg',
     reportIssue: 'Rapportera ett problem',
     proxy: 'Röster Ombud',
-    recentSwipes: 'Senaste Swipes',
-    stats: 'Stats & Nyckeltal',
+    recentSwipes: 'Senaste passage',
+    stats: 'Statistik',
     lastSeen: 'Senast aktiv',
-    membership: 'Medlemskap',
+    membership: 'Mitt medlemskap',
     billing: 'Betalmetod',
     profile: 'Profil',
     checkAccess: 'Åtkomsträttigheter',
@@ -45,7 +45,7 @@ export default {
     Error403: 'Error 403',
   },
   dashboard: {
-    usefulResources: 'Medlemsresurser',
+    usefulResources: 'Information',
     quickCards: 'Genvägar',
     quickActions: 'Snabbåtkomst',
     signedIn: 'Du är inloggad. Logga ut när du går.',
@@ -59,7 +59,7 @@ export default {
   },
   error: {
     error: 'Fel',
-    contactUs: 'Kontakta osss om du fortsätter få detta fel.',
+    contactUs: 'Kontakta oss om du fortsätter få detta fel.',
     loginFailed: 'Ditt användarnamn eller lösenord är felaktigt.',
     accountAlreadyExists: 'Denna email används redan.',
     screenNameAlreadyExists: 'Detta användarnamn är redan taget.',
@@ -80,7 +80,7 @@ export default {
     401: ' Du måste vara inloggad för att komma åt denna sida. (Error 401)',
     403: ' Du saknar rättigheter för att komma åt denna sida. (Error 403)',
     '403MemberOnly':
-      'Du måste vara ha ett aktivt medkelsmakp för att komma åt denna sida. (Error 403)',
+      'Du måste ha ett aktivt medlemskap för att komma åt denna sida. (Error 403)',
     404: ' Denna sida kan inte hittas. (Error 404)',
     500: ' Det uppstod ett fel på servern. Försök igen senare. (Error 500)',
     501: ' Denna funktion är ännu inte implementerad. (Error 501)',
@@ -100,16 +100,16 @@ export default {
     linkText: 'på GitHub',
   },
   stats: {
-    title: 'Stats and Nyckeltal',
+    title: 'Statistik och Nyckeltal',
     errorLoading: 'Det uppstod ett fel vid hämtning av din statistik.',
     internalStatsDescription:
-      'Denna sida listar några stats och nyckeltal som hämtas in av medlemsportalen.',
+      'Denna sida visar statistik som hämtats in av medlemsportalen.',
     disabled:
       'Denna funktion är just nu avstängd. Nyckeltal kan saknas eller vara utdaterade.',
     member_count_total: 'Antal medlemmar',
     member_count_6_months_total: 'Antal medlemmar (>6 Mån)',
     member_count_12_months_total: 'Antal medlemmar (>12 Mån)',
-    subscription_count_total: 'Abonnemang States',
+    subscription_count_total: 'Status på abonnemang',
     memberbucks_balance_total: 'Spacebucks i omlopp',
     memberbucks_transactions_total: 'Spacebucks Transaktionsvolym',
     labels: {
@@ -151,7 +151,7 @@ export default {
     login: 'Login',
     resetPassword: 'Återställ lösenord',
     loginSuccess: 'Inloggning lyckades',
-    registerHere: 'Registrera Här',
+    registerHere: 'Registrera dig här',
     notAMember: 'Inte medlem än? ',
     loginToContinue: 'Logga in för att fortsätta',
     forgottenPassword: 'Glömt ditt lösenord?',
@@ -217,12 +217,10 @@ export default {
     lastSeen: 'Senast aktiv',
   },
   lastseen: {
-    pageDescription:
-      'Här är en lista på när varje medlem senast använde sitt kort.',
+    pageDescription: 'En lista på när varje medlem senast använde sitt kort.',
   },
   recentSwipes: {
-    pageDescription:
-      'Här är en lista med de senate 300 swipes på dörrar och lås.',
+    pageDescription: 'En lista med de senate 300 passage genom dörrar och lås.',
     inProgress: 'Pågår',
     system: 'SYSTEM',
   },
@@ -269,7 +267,7 @@ export default {
     vehicleRegistrationPlate: 'Registreringsnummer på fordon',
     vehicleRegistrationNote:
       'Fyll i ditt fordons registreringsnummer. Ange flera med mellanslag emellean. Vi använder detta för att hantera parkering.',
-    excludeFromEmailExport: 'Uteslut från email exports',
+    excludeFromEmailExport: 'Uteslut från email export',
   },
   digitalId: {
     title: 'Digitalt ID',
@@ -341,7 +339,7 @@ export default {
     selectToContinue: 'Bekräfta din betalmetod',
     addCard: 'Lägg till kort',
     addCardDescription:
-      'Lägg till ditt kort nedan. Vi sparar inte info om ditt betalkort förutom de sista 4 siffrorna och datum för utgång. Vår säkra betal betallösning som vi använder sparar informationen åt oss.',
+      'Lägg till ditt kort nedan. Vi sparar inte info om ditt betalkort förutom de sista 4 siffrorna och datum för utgång. Vår säkra betallösning (Stripe) sparar informationen åt oss.',
     addCardError: 'Det uppstod ett fel med ditt kort. Försök igen senare.',
     saveCard: 'Spara betalkort',
     savedCardTitle: 'Sparade betalkort',
@@ -397,11 +395,11 @@ export default {
     memberList: 'Medlemmar på sidan',
   },
   member: 'medlem | medlemmar',
-  actionFailed: 'Action misslyckades',
-  actionSuccess: 'Action lyckades',
+  actionFailed: 'Åtgärd misslyckades',
+  actionSuccess: 'Åtgärd lyckades',
   warning: 'Varning',
   confirm: 'Bekräfta',
-  confirmAction: 'Bekräfta action',
+  confirmAction: 'Bekräfta åtgärd',
   confirmRemove: 'Är du säker på att du vill ta bort detta?',
   never: 'Aldrig',
   edit: 'Redigera',
@@ -414,8 +412,8 @@ export default {
   progress: 'Progress: {percent}%',
   adminTools: {
     title: 'Verktyg',
-    optOutEmailExport: 'Opt out för email export',
-    optInEmailExport: 'Opt in för email export',
+    optOutEmailExport: 'Exkludera från email export',
+    optInEmailExport: 'Inkludera i email export',
     emailAddresses: 'Kopiera Email-lista',
     copyEmailListSuccess:
       'Kopierade {n} Emailaddresser! | Kopierade {n} Emailaddresses!',
@@ -437,7 +435,7 @@ export default {
     inactive: 'Inaktiva',
     new: 'Nya',
     accountOnly: 'Endast konto',
-    enableAccess: 'Tillåt Åtkomst',
+    enableAccess: 'Aktivera Åtkomst',
     disableAccess: 'Stäng av åtkomst',
     sendWelcomeEmail: 'Skicka välkomst-mail',
     sendSms: 'Skicka SMS till medlem',
@@ -450,8 +448,8 @@ export default {
     smsContentTitle: 'SMS Innehåll',
     smsContentPlaceholder: 'Detta är en viktig notifiering.',
     smsOneWayBody: '{message} Ej svar.',
-    manageMember: 'hantera Member',
-    makeMember: 'Skapa Member',
+    manageMember: 'Hantera Medlem',
+    makeMember: 'Aktivera Åtkomst',
     makeMemberSuccess: 'Medlem skapad och välkomstmail skickat.',
     makeMemberError: 'Okänt fel när medlem skapades.',
     makeMemberErrorEmail: 'Fel vid utskick av välkomstmail.',
@@ -472,7 +470,7 @@ export default {
     otherAttributes: 'Kontoinformation',
     memberDates: 'Viktiga datum',
     lastInduction: 'Senaste introduktion',
-    lastUpdatedProfile: 'Senast uppdaterade profil',
+    lastUpdatedProfile: 'Profil senast uppdaterad',
     registrationDate: 'Registreringsdatum',
     lastSeen: 'Senast aktiv',
     billing: 'Betalning',
@@ -492,7 +490,7 @@ export default {
       accountonly: 'Endast konto',
     },
     billingInfo: 'Betalinformation',
-    billingCycleAnchor: 'Ankare för betacykel',
+    billingCycleAnchor: 'Ankare för betalcykel',
     cancelAt: 'Avbryts vid',
     cancelAtPeriodEnd: 'Avbryts vid periodslut',
     currentPeriodEnd: 'Nuvarande period slutar',
@@ -538,7 +536,7 @@ export default {
     confirmSelection: 'Bekräfta',
     selectToContinue: 'Välj ett betalningsalternativ',
     noPlans: 'Det finns inga betalalternativ för denna medlemskapsnivå.',
-    dueToday: 'Förfaller idag: {amount}',
+    dueToday: 'Att betala idag: {amount}',
     intervalDescription: '{amount} varje {interval}',
     interval: {
       day: 'dag | {n} dagar',
@@ -550,20 +548,20 @@ export default {
     signupSuccess: 'Registrering lyckades',
     signupSuccessDescription:
       'Din betalning har hanterats. Denna sida kommer laddas om strax.',
-    cancelButton: 'Avbryt medlemskap',
+    cancelButton: 'Avbryt abonnemang',
     cancelConfirmDescription:
-      'Är du säker på att du vill avbryta ditt medlemskap? Ditt medlemskap kommer fortsätta vara aktivt fram tills slutet på din nuvarande period. Du kan återuppta medlemskapet när du vill innan periodens slut.',
+      'Är du säker på att du vill avbryta ditt abonnemang? Ditt labbmedlemskap kommer att fortsätta vara aktivt fram tills slutet på din nuvarande period. Du kan återuppta medlemskapet om du ångrar dig innan periodens slut.',
     cancelSuccessDescription:
-      'Ditt medlemskap har avbrytits. Denna sida kommer laddas om strax.',
+      'Ditt labbmedlemskap har avbrutits. Denna sida kommer laddas om strax.',
     cancelFailed: 'Avslut misslyckades',
     resumeFailed: 'Återstart misslyckades',
-    resumeButton: 'Återstarta medlemskap',
-    cancelling: 'Ditt medlemskap håller på att avslutas',
+    resumeButton: 'Återuppta medlemskap',
+    cancelling: 'Ditt labbmedlemskap håller på att avslutas',
     cancellingDescription:
-      'Ditt medlemskap kommer att avslutas på datumet {date}. Om du vill återstarta ditt medlemskap (se ovan), vänligen klicka nedan.',
+      'Ditt labbmedlemskap kommer att avslutas {date}. Om du vill återuppta ditt medlemskap, vänligen klicka nedan.',
     renewalDate: 'Förnyelsedatum',
     signupDate: 'Registreringsdatum',
-    subscriptionInfo: 'Abonnemangs-info',
+    subscriptionInfo: 'Abonnemangsinformation',
     accountOnlyWarning:
       "Din profil är för närvarande 'endast konto'. Detta beror på att du skippade denna process förra gången. Du är välkommen att forsätta använda detta konto i sin nuvarande form, eller så kan du registrera dig för att bli medlem nedan. ",
     profileAccountOnlyWarning:
@@ -581,15 +579,15 @@ export default {
     canvasEmailWarning:
       'Använd samma email-adress som du hade vid registreringen ({email}) för att dina framsteg ska synkroniseras. Detta är en begränsning i Canvas-plattformen.',
     waitingCompletion: 'Väntar på färdigställande...',
-    accessCard: 'Nyckelkort',
-    accessCardNumber: 'Nummer Nyckelkort',
-    assignAccessCard: 'Nyckelkort',
-    assignAccessCardDescription: 'Fyll i ditt nyckelkorts-nummer nedan.',
+    accessCard: 'Nyckelbricka',
+    accessCardNumber: 'Nummer Nyckelbricka',
+    assignAccessCard: 'Nyckelbricka',
+    assignAccessCardDescription: 'Fyll i nummer för din nyckelbricka nedan.',
     assignAccessCardWarning:
       'Dubbelkolla innan du fortsätter då du måste kontakta oss för att ändra detta nummer.',
     collectAccessCardDescription:
-      'Tack för att du färdigställt alla obligatoriska steg. Det sista du behöver göra är att kontakta oss för att hitta ' +
-      'en tid att färdigställa ditt medlemskap.',
+      'Du behöver ha en registrerad nyckelbricka för att kunna använda ditt labbmedlemskap. Om du inte fått någon nyckelbricka så boka tid för att få ' +
+      'en introduktion till föreningen och din nyckelbricka. Om du redan fått en nyckelbricka så är den inte registrerad på ditt konto. Kontakta oss i så fall!',
     submitted: 'Ansökan för medlemskap inskickad',
     submittedDescription:
       "Din ansökan för medlemskap har skickats in och du är nu en 'ansökande medlem'. Ditt medlemskap kommer godkännas snart, men vi har gett dig åtkomst till sidan direkt. Du kommer få ett mail som bekräftar ditt nyckelkort har aktiverats. Om du av någon anledning får avslag på medlemskapet så kommer du få ett mail med mer information.",
@@ -609,7 +607,7 @@ export default {
     select: 'Medlemskapsnivå',
     selectToContinue: 'Välj en medlemskapsnivå',
     noTiers: 'Det finns inga medlemskapsnivåer tillgänliga just nu.',
-    selected: 'Välj en medlemskapsnivå',
+    selected: 'Vald medlemskapsnivå',
     nodata: 'Det finns inga medlemskapsnivåer i systemet.',
     name: 'Namn på medlemskapsnivå',
     description: 'Beskrivning',
@@ -617,11 +615,11 @@ export default {
     add: 'Lägg till medlemskapsnivå',
     becomeMember: 'Bli medlem',
     confirm:
-      'Bekräfta ditt val av medlemskapsnivå och betalalternativ. Genom att fortsätta så godkänner du att betala för din medlemskapsnivå med hjälp av ditt betalkort. Din första betalning komemr dras nu, och framtida betalningar på {intervalDescription}.',
+      'Bekräfta ditt val av medlemskapsnivå och betalalternativ. Genom att fortsätta så godkänner du att betala för din medlemskapsnivå med hjälp av ditt betalkort. Din första betalning kommer att dras nu, och sen framtida betalningar på {intervalDescription} tills du väljer att avsluta ditt labbmedlemsskap',
     confirmDelay:
       'Din ansökan om medlemskap kommer skickas efter att du färdigställt nästa steg.',
     finish: 'Betala & Fortsätt',
-    plansFrom: 'Från {plan}',
+    plansFrom: 'Kostar {plan}',
     skipSignup: 'Skippa registrering (om du bara vill ha ett konto)',
   },
   tierForm: {
@@ -647,11 +645,11 @@ export default {
     totalVolume: 'Total volym',
   },
   registrationCard: {
-    register: 'Registrera ett konto',
+    register: 'Registrera ett konto för medlemskap',
     alreadyAMember: 'Redan medlem? ',
     loginHere: 'Logga in här',
     registrationComplete:
-      'Registrering färdig. Kolla din email och klicka på länken för att verifiera din epostadress.',
+      'Kolla din email och klicka på länken i mottaget email för att verifiera din epostadress och slutföra registreringen.',
   },
   verifyEmail: {
     error:
