@@ -137,8 +137,8 @@ const PageAndRouteConfig: PageAndRouteConfigType[] = [
         to: '/tools/stats/',
         name: 'stats',
         loggedIn: true,
-        memberOnly: true,
         admin: true,
+        featureEnabledFlag: 'enableStatsPage',
         component: () => import('pages/Stats.vue'),
       },
     ],
@@ -149,7 +149,6 @@ const PageAndRouteConfig: PageAndRouteConfigType[] = [
     loggedIn: true,
     admin: true,
     kiosk: true,
-    memberOnly: true,
     children: [
       {
         icon: icons.reportIssue,
@@ -168,7 +167,6 @@ const PageAndRouteConfig: PageAndRouteConfigType[] = [
         loggedIn: true,
         admin: true,
         kiosk: true,
-        memberOnly: true,
         featureEnabledFlag: 'enableProxyVoting',
         component: () => import('pages/Proxy.vue'),
       },
@@ -179,7 +177,6 @@ const PageAndRouteConfig: PageAndRouteConfigType[] = [
         loggedIn: true,
         admin: true,
         kiosk: true,
-        memberOnly: true,
         component: () => import('pages/RecentSwipes.vue'),
       },
       {
@@ -189,20 +186,8 @@ const PageAndRouteConfig: PageAndRouteConfigType[] = [
         loggedIn: true,
         admin: true,
         kiosk: true,
-        memberOnly: true,
         component: () => import('pages/LastSeen.vue'),
-      },
-      {
-        icon: icons.stats,
-        to: '/tools/stats/',
-        name: 'stats',
-        loggedIn: true,
-        admin: true,
-        kiosk: true,
-        memberOnly: true,
-        featureEnabledFlag: 'enableStatsPage',
-        component: () => import('pages/Stats.vue'),
-      },
+      }
     ],
   },
   {
