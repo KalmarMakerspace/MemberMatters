@@ -830,7 +830,9 @@ class StripeWebhook(StripeAPIView):
                 "Membership was cancelled due to Stripe subscription ending", "stripe"
             )
 
-            subject = f"Labbmedlemsskapet för {member_profile.get_full_name()} har avslutats"
+            subject = (
+                f"Labbmedlemsskapet för {member_profile.get_full_name()} har avslutats"
+            )
             title = subject
             message = (
                 f"Stripe-abonnemanget för {member_profile.get_full_name()} har avslutats, så labbmedlemskapet har "
