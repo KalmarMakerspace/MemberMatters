@@ -552,7 +552,7 @@ export default {
     cancelConfirmDescription:
       'Är du säker på att du vill avbryta ditt abonnemang? Ditt labbmedlemskap kommer att fortsätta vara aktivt fram tills slutet på din nuvarande period. Du kan återuppta medlemskapet om du ångrar dig innan periodens slut.',
     cancelSuccessDescription:
-      'Ditt labbmedlemskap har avbrutits. Denna sida kommer laddas om strax.',
+      'Ditt abonnemang har . Denna sida kommer laddas om strax.',
     cancelFailed: 'Avslut misslyckades',
     resumeFailed: 'Återstart misslyckades',
     resumeButton: 'Återuppta medlemskap',
