@@ -27,6 +27,7 @@ export default {
     interlocks: 'Lås',
     devices: 'Enheter',
     kiosks: 'Kiosker',
+    stations: 'Stationer',
 
     memberTools: 'Medlemsverktyg',
     reportIssue: 'Rapportera ett problem',
@@ -268,6 +269,18 @@ export default {
     vehicleRegistrationNote:
       'Fyll i ditt fordons registreringsnummer. Ange flera med mellanslag emellean. Vi använder detta för att hantera parkering.',
     excludeFromEmailExport: 'Uteslut från email export',
+    memberNumber: 'Medlemsnummer',
+    personnummer: 'Personnummer',
+    streetAddress: 'Gatuadress',
+    zipCode: 'Postnummer',
+    city: 'Ort',
+    responsibleAdult: 'Målsman',
+    lastYearlyMembershipPaidDate: 'Årsavgift senast betald (datum)',
+    lastYearlyMembershipPaidAmount: 'Årsavgift senast betald (belopp)',
+    memberMessage: 'Meddelande till medlem',
+    memberMessageHint: 'Visas för medlemmen på deras egen profil.',
+    notes: 'Anteckningar (admin)',
+    notesHint: 'Synligt endast för administratörer.',
   },
   digitalId: {
     title: 'Digitalt ID',
@@ -467,6 +480,7 @@ export default {
     userInterlockLogs: 'Lås Session Logs',
     stats: 'Stats',
     mainProfile: 'Huvudprofil',
+    additionalDetails: 'Ytterligare uppgifter',
     otherAttributes: 'Kontoinformation',
     memberDates: 'Viktiga datum',
     lastInduction: 'Senaste introduktion',
@@ -625,6 +639,25 @@ export default {
   tierForm: {
     fail: 'Misslyckades att lägga till medlemskapsnivå.',
     success: 'Medlemskapsnivå tillagd.',
+  },
+  stations: {
+    nodata: 'Det finns inga stationer i systemet.',
+    name: 'Stationsnamn',
+    add: 'Lägg till station',
+    rename: 'Byt namn på station',
+    remove: 'Ta bort station',
+  },
+  stationForm: {
+    fail: 'Misslyckades att lägga till station.',
+    success: 'Station tillagd.',
+  },
+  memberInductions: {
+    title: 'Introduktioner',
+    nodata: 'Medlemmen har inte introducerats på någon station än.',
+    station: 'Station',
+    date: 'Datum',
+    add: 'Lägg till',
+    remove: 'Ta bort introduktion',
   },
   interlocks: {
     nodata: 'Det finns inga lås is systemet.',

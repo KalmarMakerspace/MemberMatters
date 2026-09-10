@@ -45,6 +45,22 @@ urlpatterns = [
         views.MemberLogs.as_view(),
         name="MemberLogs",
     ),
+    path(
+        "api/admin/members/<int:member_id>/inductions/",
+        views.MemberInductions.as_view(),
+        name="MemberInductions",
+    ),
+    path(
+        "api/admin/members/<int:member_id>/inductions/<int:induction_id>/",
+        views.MemberInductions.as_view(),
+        name="MemberInductions",
+    ),
+    path("api/admin/stations/", views.Stations.as_view(), name="Stations"),
+    path(
+        "api/admin/stations/<int:station_id>/",
+        views.Stations.as_view(),
+        name="Stations",
+    ),
     path("api/admin/doors/", views.Doors.as_view(), name="Doors"),
     path("api/admin/interlocks/", views.Interlocks.as_view(), name="Interlocks"),
     path("api/admin/doors/<int:door_id>/", views.Doors.as_view(), name="Doors"),
