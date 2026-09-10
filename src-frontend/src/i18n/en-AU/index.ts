@@ -433,7 +433,8 @@ export default {
       'Upload a CSV file with columns: email, first_name, last_name, screen_name (required); phone, rfid, state (optional). Existing members matched by email will be updated.',
     importCsvFileLabel: 'Select CSV file',
     importCsvResultTitle: 'Import Complete',
-    importCsvSuccess: 'Created {created} new member(s), updated {updated} existing member(s).',
+    importCsvSuccess:
+      'Created {created} new member(s), updated {updated} existing member(s).',
     importCsvErrors: '{count} row(s) had errors:',
     filterOptions: 'Filter',
     all: 'All',
