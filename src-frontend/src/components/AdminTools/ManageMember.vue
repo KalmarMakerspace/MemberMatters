@@ -19,6 +19,7 @@
         <q-tab name="profile" :label="$t('menuLink.profile')" />
         <q-tab name="access" :label="$t('adminTools.access')" />
         <q-tab name="billing" :label="$t('adminTools.billing')" />
+        <q-tab name="inductions" :label="$t('memberInductions.title')" />
         <q-tab name="log" :label="$t('adminTools.log')" />
       </q-tabs>
 
@@ -257,6 +258,174 @@
                   <template #append>
                     <saved-notification
                       :success="saved.vehicleRegistrationPlate"
+                      :error="saved.error"
+                    />
+                  </template>
+                </q-input>
+
+                <h5 class="q-my-sm">
+                  {{ $t('adminTools.additionalDetails') }}
+                </h5>
+
+                <q-input
+                  v-model="profileForm.memberNumber"
+                  outlined
+                  :debounce="debounceLength"
+                  :label="$t('form.memberNumber')"
+                  @update:model-value="saveChange('memberNumber')"
+                >
+                  <template #append>
+                    <saved-notification
+                      :success="saved.memberNumber"
+                      :error="saved.error"
+                    />
+                  </template>
+                </q-input>
+
+                <q-input
+                  v-model="profileForm.personnummer"
+                  outlined
+                  :debounce="debounceLength"
+                  :label="$t('form.personnummer')"
+                  @update:model-value="saveChange('personnummer')"
+                >
+                  <template #append>
+                    <saved-notification
+                      :success="saved.personnummer"
+                      :error="saved.error"
+                    />
+                  </template>
+                </q-input>
+
+                <q-input
+                  v-model="profileForm.streetAddress"
+                  outlined
+                  :debounce="debounceLength"
+                  :label="$t('form.streetAddress')"
+                  @update:model-value="saveChange('streetAddress')"
+                >
+                  <template #append>
+                    <saved-notification
+                      :success="saved.streetAddress"
+                      :error="saved.error"
+                    />
+                  </template>
+                </q-input>
+
+                <q-input
+                  v-model="profileForm.zipCode"
+                  outlined
+                  :debounce="debounceLength"
+                  :label="$t('form.zipCode')"
+                  @update:model-value="saveChange('zipCode')"
+                >
+                  <template #append>
+                    <saved-notification
+                      :success="saved.zipCode"
+                      :error="saved.error"
+                    />
+                  </template>
+                </q-input>
+
+                <q-input
+                  v-model="profileForm.city"
+                  outlined
+                  :debounce="debounceLength"
+                  :label="$t('form.city')"
+                  @update:model-value="saveChange('city')"
+                >
+                  <template #append>
+                    <saved-notification
+                      :success="saved.city"
+                      :error="saved.error"
+                    />
+                  </template>
+                </q-input>
+
+                <q-select
+                  v-model="profileForm.responsibleAdultId"
+                  outlined
+                  clearable
+                  emit-value
+                  map-options
+                  :options="responsibleAdultOptions"
+                  :label="$t('form.responsibleAdult')"
+                  @update:model-value="saveChange('responsibleAdultId')"
+                >
+                  <template #append>
+                    <saved-notification
+                      :success="saved.responsibleAdultId"
+                      :error="saved.error"
+                    />
+                  </template>
+                </q-select>
+
+                <q-input
+                  v-model="profileForm.lastYearlyMembershipPaidDate"
+                  type="date"
+                  outlined
+                  :debounce="debounceLength"
+                  :label="$t('form.lastYearlyMembershipPaidDate')"
+                  @update:model-value="
+                    saveChange('lastYearlyMembershipPaidDate')
+                  "
+                >
+                  <template #append>
+                    <saved-notification
+                      :success="saved.lastYearlyMembershipPaidDate"
+                      :error="saved.error"
+                    />
+                  </template>
+                </q-input>
+
+                <q-input
+                  v-model.number="profileForm.lastYearlyMembershipPaidAmount"
+                  type="number"
+                  step="0.01"
+                  outlined
+                  :debounce="debounceLength"
+                  :label="$t('form.lastYearlyMembershipPaidAmount')"
+                  @update:model-value="
+                    saveChange('lastYearlyMembershipPaidAmount')
+                  "
+                >
+                  <template #append>
+                    <saved-notification
+                      :success="saved.lastYearlyMembershipPaidAmount"
+                      :error="saved.error"
+                    />
+                  </template>
+                </q-input>
+
+                <q-input
+                  v-model="profileForm.memberMessage"
+                  type="textarea"
+                  outlined
+                  :debounce="debounceLength"
+                  :hint="$t('form.memberMessageHint')"
+                  :label="$t('form.memberMessage')"
+                  @update:model-value="saveChange('memberMessage')"
+                >
+                  <template #append>
+                    <saved-notification
+                      :success="saved.memberMessage"
+                      :error="saved.error"
+                    />
+                  </template>
+                </q-input>
+
+                <q-input
+                  v-model="profileForm.notes"
+                  type="textarea"
+                  outlined
+                  :debounce="debounceLength"
+                  :hint="$t('form.notesHint')"
+                  :label="$t('form.notes')"
+                  @update:model-value="saveChange('notes')"
+                >
+                  <template #append>
+                    <saved-notification
+                      :success="saved.notes"
                       :error="saved.error"
                     />
                   </template>
@@ -808,6 +977,75 @@
                   </q-td>
                 </template>
               </q-table>
+            </div>
+          </div>
+        </q-tab-panel>
+
+        <q-tab-panel name="inductions">
+          <div class="column q-gutter-y-sm full-width" style="max-width: 500px">
+            <div class="text-h6">
+              {{ $t('memberInductions.title') }}
+            </div>
+
+            <q-list
+              v-if="inductions.length"
+              bordered
+              padding
+              class="rounded-borders"
+            >
+              <q-item v-for="induction in inductions" :key="induction.id">
+                <q-item-section>
+                  <q-item-label>{{ induction.stationName }}</q-item-label>
+                  <q-item-label caption>
+                    {{ formatDate(induction.date) }}
+                  </q-item-label>
+                </q-item-section>
+                <q-item-section side>
+                  <q-btn
+                    flat
+                    round
+                    dense
+                    color="negative"
+                    :icon="icons.delete"
+                    @click="removeInduction(induction.id)"
+                  />
+                </q-item-section>
+              </q-item>
+            </q-list>
+
+            <div v-else>
+              {{ $t('memberInductions.nodata') }}
+            </div>
+
+            <q-separator class="q-my-sm" />
+
+            <div class="row q-col-gutter-sm items-start">
+              <div class="col-6">
+                <q-select
+                  v-model="newInduction.stationId"
+                  outlined
+                  emit-value
+                  map-options
+                  :options="stationOptions"
+                  :label="$t('memberInductions.station')"
+                />
+              </div>
+              <div class="col-4">
+                <q-input
+                  v-model="newInduction.date"
+                  type="date"
+                  outlined
+                  :label="$t('memberInductions.date')"
+                />
+              </div>
+              <div class="col-2">
+                <q-btn
+                  color="primary"
+                  :disable="!newInduction.stationId || !newInduction.date"
+                  :label="$t('memberInductions.add')"
+                  @click="addInduction"
+                />
+              </div>
             </div>
           </div>
         </q-tab-panel>
@@ -1370,7 +1608,13 @@ import icons from '../../icons';
 import formatMixin from '@mixins/formatMixin';
 import { mapGetters } from 'vuex';
 import { QForm } from 'quasar';
-import { MemberBillingInfo, MemberProfile, MemberState } from 'types/member';
+import {
+  MemberBillingInfo,
+  MemberInduction,
+  MemberProfile,
+  MemberState,
+  Station,
+} from 'types/member';
 import { defineComponent } from 'vue';
 
 export default defineComponent({
@@ -1406,6 +1650,16 @@ export default defineComponent({
         phone: '',
         screenName: '',
         vehicleRegistrationPlate: '',
+        memberNumber: '',
+        personnummer: '',
+        streetAddress: '',
+        zipCode: '',
+        city: '',
+        responsibleAdultId: null as number | null,
+        lastYearlyMembershipPaidDate: '',
+        lastYearlyMembershipPaidAmount: null as number | null,
+        memberMessage: '',
+        notes: '',
       },
       saved: {
         // if there was an error saving the form
@@ -1418,6 +1672,22 @@ export default defineComponent({
         phone: false,
         screenName: false,
         vehicleRegistrationPlate: false,
+        memberNumber: false,
+        personnummer: false,
+        streetAddress: false,
+        zipCode: false,
+        city: false,
+        responsibleAdultId: false,
+        lastYearlyMembershipPaidDate: false,
+        lastYearlyMembershipPaidAmount: false,
+        memberMessage: false,
+        notes: false,
+      },
+      stations: [] as Station[],
+      inductions: [] as MemberInduction[],
+      newInduction: {
+        stationId: null as number | null,
+        date: '',
       },
       billing: null as MemberBillingInfo | null,
       logs: {
@@ -1444,6 +1714,8 @@ export default defineComponent({
     this.loadInitialForm();
     this.getMemberBilling();
     this.getMemberLogs();
+    this.getStations();
+    this.getMemberInductions();
   },
   methods: {
     loadInitialForm() {
@@ -1455,6 +1727,19 @@ export default defineComponent({
       this.profileForm.screenName = this.selectedMember.screenName;
       this.profileForm.vehicleRegistrationPlate =
         this.selectedMember.vehicleRegistrationPlate;
+      this.profileForm.memberNumber = this.selectedMember.memberNumber;
+      this.profileForm.personnummer = this.selectedMember.personnummer;
+      this.profileForm.streetAddress = this.selectedMember.address?.street;
+      this.profileForm.zipCode = this.selectedMember.address?.zipCode;
+      this.profileForm.city = this.selectedMember.address?.city;
+      this.profileForm.responsibleAdultId =
+        this.selectedMember.responsibleAdult?.id ?? null;
+      this.profileForm.lastYearlyMembershipPaidDate =
+        this.selectedMember.lastYearlyMembershipPaid?.date;
+      this.profileForm.lastYearlyMembershipPaidAmount =
+        this.selectedMember.lastYearlyMembershipPaid?.amount;
+      this.profileForm.memberMessage = this.selectedMember.memberMessage;
+      this.profileForm.notes = this.selectedMember.notes;
     },
     saveChange(field: keyof typeof this.saved) {
       const formRef = this.$refs.formRef as typeof QForm;
@@ -1547,6 +1832,65 @@ export default defineComponent({
           setTimeout(() => {
             this.stateLoading = false;
           }, 1200);
+        });
+    },
+    getStations() {
+      this.$axios
+        .get('/api/admin/stations/')
+        .then((res) => {
+          this.stations = res.data;
+        })
+        .catch(() => {
+          this.$q.dialog({
+            title: this.$t('error.error'),
+            message: this.$t('error.requestFailed'),
+          });
+        });
+    },
+    getMemberInductions() {
+      this.$axios
+        .get(`/api/admin/members/${this.member.id}/inductions/`)
+        .then((res) => {
+          this.inductions = res.data;
+        })
+        .catch(() => {
+          this.$q.dialog({
+            title: this.$t('error.error'),
+            message: this.$t('error.requestFailed'),
+          });
+        });
+    },
+    addInduction() {
+      this.$axios
+        .post(`/api/admin/members/${this.member.id}/inductions/`, {
+          stationId: this.newInduction.stationId,
+          date: this.newInduction.date,
+        })
+        .then(() => {
+          this.newInduction.stationId = null;
+          this.newInduction.date = '';
+          this.getMemberInductions();
+        })
+        .catch(() => {
+          this.$q.dialog({
+            title: this.$t('error.error'),
+            message: this.$t('error.requestFailed'),
+          });
+        });
+    },
+    removeInduction(inductionId: number) {
+      this.$axios
+        .delete(
+          `/api/admin/members/${this.member.id}/inductions/${inductionId}/`
+        )
+        .then(() => {
+          this.getMemberInductions();
+        })
+        .catch(() => {
+          this.$q.dialog({
+            title: this.$t('error.error'),
+            message: this.$t('error.requestFailed'),
+          });
         });
     },
     setMemberState(state: MemberState) {
@@ -1668,6 +2012,17 @@ export default defineComponent({
     },
     icons() {
       return icons;
+    },
+    responsibleAdultOptions() {
+      return ((this.members as MemberProfile[]) || [])
+        .filter((member) => member.id !== this.member.id)
+        .map((member) => ({ label: member.name.full, value: member.id }));
+    },
+    stationOptions() {
+      return this.stations.map((station) => ({
+        label: station.name,
+        value: station.id,
+      }));
     },
     smsCost() {
       const smsContainsUnicode = /[^\u0000-\u00ff]/.test(this.smsBody);

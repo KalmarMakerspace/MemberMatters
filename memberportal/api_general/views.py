@@ -383,6 +383,7 @@ class ProfileDetail(generics.GenericAPIView):
             "phone": p.phone,
             "memberStatus": p.state,
             "vehicleRegistrationPlate": p.vehicle_registration_plate,
+            "message": p.member_message,
             "lastInduction": p.last_induction,
             "lastSeen": p.last_seen,
             "firstJoined": p.created,

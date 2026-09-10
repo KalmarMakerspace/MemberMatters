@@ -27,6 +27,7 @@ export default {
     interlocks: 'Interlocks',
     devices: 'Devices',
     kiosks: 'Kiosks',
+    stations: 'Stations',
 
     memberTools: 'Member Tools',
     reportIssue: 'Report Issue',
@@ -275,6 +276,18 @@ export default {
     vehicleRegistrationNote:
       'Please enter your vehicle registration plate if you have any. Separate multiple with a space. We use this to help manage parking.',
     excludeFromEmailExport: 'Excluded from email exports',
+    memberNumber: 'Member Number',
+    personnummer: 'Personnummer',
+    streetAddress: 'Street Address',
+    zipCode: 'Zip / Postal Code',
+    city: 'City / Suburb',
+    responsibleAdult: 'Responsible Adult',
+    lastYearlyMembershipPaidDate: 'Yearly Membership Last Paid (Date)',
+    lastYearlyMembershipPaidAmount: 'Yearly Membership Last Paid (Amount)',
+    memberMessage: 'Message to Member',
+    memberMessageHint: 'Shown to the member on their own profile.',
+    notes: 'Admin Notes',
+    notesHint: 'Only visible to admins.',
   },
   digitalId: {
     title: 'Digital ID',
@@ -433,7 +446,8 @@ export default {
       'Upload a CSV file with columns: email, first_name, last_name, screen_name (required); phone, rfid, state (optional). Existing members matched by email will be updated.',
     importCsvFileLabel: 'Select CSV file',
     importCsvResultTitle: 'Import Complete',
-    importCsvSuccess: 'Created {created} new member(s), updated {updated} existing member(s).',
+    importCsvSuccess:
+      'Created {created} new member(s), updated {updated} existing member(s).',
     importCsvErrors: '{count} row(s) had errors:',
     filterOptions: 'Filter',
     all: 'All',
@@ -473,6 +487,7 @@ export default {
     userInterlockLogs: 'Interlock Session Logs',
     stats: 'Stats',
     mainProfile: 'Main Profile',
+    additionalDetails: 'Additional Details',
     otherAttributes: 'Account Info',
     memberDates: 'Important Dates',
     lastInduction: 'Last Induction',
@@ -633,6 +648,25 @@ export default {
   tierForm: {
     fail: 'Failed to add a new membership plan.',
     success: 'Successfully added new membership plan.',
+  },
+  stations: {
+    nodata: 'There are no stations in the system.',
+    name: 'Station Name',
+    add: 'Add a new station',
+    rename: 'Rename station',
+    remove: 'Remove this station',
+  },
+  stationForm: {
+    fail: 'Failed to add a new station.',
+    success: 'Successfully added new station.',
+  },
+  memberInductions: {
+    title: 'Inductions',
+    nodata: 'This member has not been inducted on any stations yet.',
+    station: 'Station',
+    date: 'Date',
+    add: 'Add',
+    remove: 'Remove induction',
   },
   interlocks: {
     nodata: 'There are no interlocks in the system.',

@@ -125,6 +125,14 @@ const PageAndRouteConfig: PageAndRouteConfigType[] = [
         component: () => import('pages/AdminTools/Devices.vue'),
       },
       {
+        icon: icons.induction,
+        to: '/manage/stations',
+        name: 'stations',
+        loggedIn: true,
+        admin: true,
+        component: () => import('pages/AdminTools/Stations.vue'),
+      },
+      {
         icon: icons.kiosks,
         to: '/manage/kiosks',
         name: 'kiosks',
@@ -187,7 +195,7 @@ const PageAndRouteConfig: PageAndRouteConfigType[] = [
         admin: true,
         kiosk: true,
         component: () => import('pages/LastSeen.vue'),
-      }
+      },
     ],
   },
   {
