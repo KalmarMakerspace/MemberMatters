@@ -443,7 +443,7 @@ export default {
     exportOptions: 'Export Options',
     importCsv: 'Import CSV',
     importCsvDescription:
-      'Upload a CSV file with columns: email, first_name, last_name, screen_name (required); phone, rfid, state (optional). Existing members matched by email will be updated.',
+      'Upload a CSV file with columns: email, first_name, last_name, screen_name (required); phone, rfid, state, member_number (optional). Existing members matched by email will be updated. A member_number that collides with an existing member will be rejected.',
     importCsvFileLabel: 'Select CSV file',
     importCsvResultTitle: 'Import Complete',
     importCsvSuccess:
@@ -490,13 +490,13 @@ export default {
     additionalDetails: 'Additional Details',
     otherAttributes: 'Account Info',
     memberDates: 'Important Dates',
-    lastInduction: 'Last Induction',
     lastUpdatedProfile: 'Last Updated Profile',
     registrationDate: 'Registration Date',
     lastSeen: 'Last Seen',
     billing: 'Billing',
     memberState: 'Member State',
     memberbucksTransactions: 'Spacebucks Transactions',
+    yearlyMembership: 'Yearly Membership',
     subscriptionInfo: 'Subscription Info',
     subscriptionStatus: 'Subscription Status',
     subscriptionStatusString: {
@@ -662,6 +662,8 @@ export default {
   },
   memberInductions: {
     title: 'Inductions',
+    general: 'General',
+    stationsTitle: 'Station Inductions',
     nodata: 'This member has not been inducted on any stations yet.',
     station: 'Station',
     date: 'Date',

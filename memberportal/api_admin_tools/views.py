@@ -30,6 +30,7 @@ from profile.models import (
     Profile,
     InductionStation,
     MemberInduction,
+    reserve_member_number,
 )
 from services import sms
 from services.emails import send_email_to_admin
@@ -607,6 +608,9 @@ class MemberProfile(APIView):
         member.save()
         member.profile.save()
 
+        if member.profile.member_number:
+            reserve_member_number(member.profile.member_number)
+
         if rfid_changed:
             for door in member.profile.doors.all():
                 door.sync()
@@ -1049,7 +1053,9 @@ class ImportMembers(APIView):
     post: Import members from a CSV file.
 
     Required columns: email, first_name, last_name, screen_name
-    Optional columns: phone, rfid, state (noob/active/inactive/accountonly)
+    Optional columns: phone, rfid, state (noob/active/inactive/accountonly), member_number
+    (must not collide with an existing member's number; rows with a colliding
+    number are rejected)
 
     Existing members (matched by email) will be updated. New members are
     created with an unusable password (login via password reset only).
@@ -1099,6 +1105,7 @@ class ImportMembers(APIView):
             phone = row.get("phone", "").strip()
             rfid = row.get("rfid", "").strip() or None
             state = row.get("state", "noob").strip() or "noob"
+            member_number = row.get("member_number", "").strip() or None
 
             if not email:
                 errors.append({"row": i, "error": "Missing email."})
@@ -1111,6 +1118,19 @@ class ImportMembers(APIView):
             if state not in VALID_STATES:
                 errors.append(
                     {"row": i, "email": email, "error": f"Invalid state '{state}'."}
+                )
+                continue
+            if member_number and (
+                Profile.objects.filter(member_number=member_number)
+                .exclude(user__email=email)
+                .exists()
+            ):
+                errors.append(
+                    {
+                        "row": i,
+                        "email": email,
+                        "error": f"Member number '{member_number}' is already in use.",
+                    }
                 )
                 continue
 
@@ -1132,6 +1152,7 @@ class ImportMembers(APIView):
                         "phone": phone,
                         "rfid": rfid,
                         "state": state,
+                        "member_number": member_number,
                     },
                 )
                 if not _:
@@ -1142,8 +1163,13 @@ class ImportMembers(APIView):
                         profile.phone = phone
                     if rfid:
                         profile.rfid = rfid
+                    if member_number:
+                        profile.member_number = member_number
                     profile.state = state
                     profile.save()
+
+                if member_number:
+                    reserve_member_number(member_number)
 
                 if user_created:
                     created += 1

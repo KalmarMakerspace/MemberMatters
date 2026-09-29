@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone
 from datetime import timedelta, datetime
 import pytz
@@ -11,6 +11,7 @@ from django.contrib.auth.models import (
 from django.core.validators import RegexValidator
 from django.conf import settings
 from constance import config
+from constance.backends.database.models import Constance as ConstanceSetting
 from api_general.models import SiteSession
 from api_admin_tools.models import PaymentPlan
 import json
@@ -296,6 +297,47 @@ class User(ExportModelOperationsMixin("user"), AbstractBaseUser, PermissionsMixi
         )
 
         return True
+
+
+def get_next_member_number():
+    """
+    Atomically reserves and returns the next member number. The underlying counter is
+    only ever advanced, never reset from currently-assigned numbers, so a number is
+    never reused even after the member it was assigned to is deleted.
+    """
+    with transaction.atomic():
+        setting, _ = ConstanceSetting.objects.select_for_update().get_or_create(
+            key="NEXT_MEMBER_NUMBER", defaults={"value": 1}
+        )
+        next_number = setting.value
+        setting.value = next_number + 1
+        setting.save()
+
+    return str(next_number)
+
+
+def reserve_member_number(member_number):
+    """
+    Given a member number that was set explicitly (e.g. via import or manual entry),
+    advances the NEXT_MEMBER_NUMBER counter past it if needed, so a future
+    auto-assigned number never collides with it. Non-numeric member numbers are
+    ignored, since the counter only tracks the plain numeric sequence.
+    """
+    if not member_number:
+        return
+
+    try:
+        number = int(member_number)
+    except (TypeError, ValueError):
+        return
+
+    with transaction.atomic():
+        setting, _ = ConstanceSetting.objects.select_for_update().get_or_create(
+            key="NEXT_MEMBER_NUMBER", defaults={"value": 1}
+        )
+        if number >= setting.value:
+            setting.value = number + 1
+            setting.save()
 
 
 class Profile(ExportModelOperationsMixin("profile"), models.Model):

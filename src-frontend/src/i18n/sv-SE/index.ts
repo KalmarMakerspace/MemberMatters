@@ -436,7 +436,7 @@ export default {
     exportOptions: 'Export Options',
     importCsv: 'Importera CSV',
     importCsvDescription:
-      'Ladda upp en CSV-fil med kolumner: email, first_name, last_name, screen_name (obligatoriska); phone, rfid, state (valfria). Befintliga medlemmar som matchar på email uppdateras.',
+      'Ladda upp en CSV-fil med kolumner: email, first_name, last_name, screen_name (obligatoriska); phone, rfid, state, member_number (valfria). Befintliga medlemmar som matchar på email uppdateras. Ett member_number som krockar med en befintlig medlem avvisas.',
     importCsvFileLabel: 'Välj CSV-fil',
     importCsvResultTitle: 'Import klar',
     importCsvSuccess:
@@ -483,13 +483,13 @@ export default {
     additionalDetails: 'Ytterligare uppgifter',
     otherAttributes: 'Kontoinformation',
     memberDates: 'Viktiga datum',
-    lastInduction: 'Senaste introduktion',
     lastUpdatedProfile: 'Profil senast uppdaterad',
     registrationDate: 'Registreringsdatum',
     lastSeen: 'Senast aktiv',
     billing: 'Betalning',
     memberState: 'Medlemsstatus',
     memberbucksTransactions: 'Spacebucks Transaktioner',
+    yearlyMembership: 'Årsmedlemskap',
     subscriptionInfo: 'Abonnemang Info',
     subscriptionStatus: 'Abonnemang Status',
     subscriptionStatusString: {
@@ -653,6 +653,8 @@ export default {
   },
   memberInductions: {
     title: 'Introduktioner',
+    general: 'Allmän',
+    stationsTitle: 'Stationsintroduktioner',
     nodata: 'Medlemmen har inte introducerats på någon station än.',
     station: 'Station',
     date: 'Datum',

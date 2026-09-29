@@ -123,313 +123,295 @@
               :class="{ 'q-px-sm': $q.screen.xs, 'q-px-lg': !$q.screen.xs }"
             >
               <q-form ref="formRef">
-                <h5 class="q-my-sm">
-                  {{ $t('adminTools.mainProfile') }}
-                </h5>
-                <q-input
-                  v-model="profileForm.email"
-                  outlined
-                  :debounce="debounceLength"
-                  :label="$t('form.email')"
-                  :rules="[
-                    (val) =>
-                      validateEmail(val) || $t('validation.invalidEmail'),
-                  ]"
-                  @update:model-value="saveChange('email')"
-                >
-                  <template #append>
-                    <saved-notification
-                      :success="saved.email"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-input>
+                <div class="column q-gutter-y-sm">
+                  <h5 class="q-my-sm">
+                    {{ $t('adminTools.mainProfile') }}
+                  </h5>
+                  <q-input
+                    v-model="profileForm.email"
+                    outlined
+                    hide-bottom-space
+                    :debounce="debounceLength"
+                    :label="$t('form.email')"
+                    :rules="[
+                      (val) =>
+                        validateEmail(val) || $t('validation.invalidEmail'),
+                    ]"
+                    @update:model-value="saveChange('email')"
+                  >
+                    <template #append>
+                      <saved-notification
+                        :success="saved.email"
+                        :error="saved.error"
+                      />
+                    </template>
+                  </q-input>
 
-                <q-input
-                  v-model="profileForm.rfidCard"
-                  outlined
-                  :debounce="debounceLength"
-                  :label="$t('form.rfidCard')"
-                  :rules="[
-                    (val) =>
-                      validateNotEmpty(val) || $t('validation.cannotBeEmpty'),
-                  ]"
-                  @update:model-value="saveChange('rfidCard')"
-                >
-                  <template v-slot:append>
-                    <saved-notification
-                      :success="saved.rfidCard"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-input>
+                  <q-input
+                    v-model="profileForm.rfidCard"
+                    outlined
+                    hide-bottom-space
+                    :debounce="debounceLength"
+                    :label="$t('form.rfidCard')"
+                    :rules="[
+                      (val) =>
+                        validateNotEmpty(val) || $t('validation.cannotBeEmpty'),
+                    ]"
+                    @update:model-value="saveChange('rfidCard')"
+                  >
+                    <template v-slot:append>
+                      <saved-notification
+                        :success="saved.rfidCard"
+                        :error="saved.error"
+                      />
+                    </template>
+                  </q-input>
 
-                <q-input
-                  v-model="profileForm.firstName"
-                  outlined
-                  :debounce="debounceLength"
-                  :label="$t('form.firstName')"
-                  :rules="[
-                    (val) =>
-                      validateNotEmpty(val) || $t('validation.cannotBeEmpty'),
-                  ]"
-                  @update:model-value="saveChange('firstName')"
-                >
-                  <template #append>
-                    <saved-notification
-                      :success="saved.firstName"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-input>
+                  <q-input
+                    v-model="profileForm.firstName"
+                    outlined
+                    hide-bottom-space
+                    :debounce="debounceLength"
+                    :label="$t('form.firstName')"
+                    :rules="[
+                      (val) =>
+                        validateNotEmpty(val) || $t('validation.cannotBeEmpty'),
+                    ]"
+                    @update:model-value="saveChange('firstName')"
+                  >
+                    <template #append>
+                      <saved-notification
+                        :success="saved.firstName"
+                        :error="saved.error"
+                      />
+                    </template>
+                  </q-input>
 
-                <q-input
-                  v-model="profileForm.lastName"
-                  outlined
-                  :debounce="debounceLength"
-                  :label="$t('form.lastName')"
-                  :rules="[
-                    (val) =>
-                      validateNotEmpty(val) || $t('validation.cannotBeEmpty'),
-                  ]"
-                  @update:model-value="saveChange('lastName')"
-                >
-                  <template #append>
-                    <saved-notification
-                      :success="saved.lastName"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-input>
+                  <q-input
+                    v-model="profileForm.lastName"
+                    outlined
+                    hide-bottom-space
+                    :debounce="debounceLength"
+                    :label="$t('form.lastName')"
+                    :rules="[
+                      (val) =>
+                        validateNotEmpty(val) || $t('validation.cannotBeEmpty'),
+                    ]"
+                    @update:model-value="saveChange('lastName')"
+                  >
+                    <template #append>
+                      <saved-notification
+                        :success="saved.lastName"
+                        :error="saved.error"
+                      />
+                    </template>
+                  </q-input>
 
-                <q-input
-                  v-model="profileForm.phone"
-                  outlined
-                  :debounce="debounceLength"
-                  :label="$t('form.mobile')"
-                  :rules="[
-                    (val) =>
-                      validateNotEmpty(val) || $t('validation.invalidPhone'),
-                  ]"
-                  @update:model-value="saveChange('phone')"
-                >
-                  <template #append>
-                    <saved-notification
-                      :success="saved.phone"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-input>
+                  <q-input
+                    v-model="profileForm.phone"
+                    outlined
+                    hide-bottom-space
+                    :debounce="debounceLength"
+                    :label="$t('form.mobile')"
+                    :rules="[
+                      (val) =>
+                        validateNotEmpty(val) || $t('validation.invalidPhone'),
+                    ]"
+                    @update:model-value="saveChange('phone')"
+                  >
+                    <template #append>
+                      <saved-notification
+                        :success="saved.phone"
+                        :error="saved.error"
+                      />
+                    </template>
+                  </q-input>
 
-                <q-input
-                  v-model="profileForm.screenName"
-                  outlined
-                  :debounce="debounceLength"
-                  :label="$t('form.screenName')"
-                  :rules="[
-                    (val) =>
-                      validateNotEmpty(val) || $t('validation.cannotBeEmpty'),
-                  ]"
-                  @update:model-value="saveChange('screenName')"
-                >
-                  <template #append>
-                    <saved-notification
-                      :success="saved.screenName"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-input>
+                  <q-input
+                    v-model="profileForm.screenName"
+                    outlined
+                    hide-bottom-space
+                    :debounce="debounceLength"
+                    :label="$t('form.screenName')"
+                    :rules="[
+                      (val) =>
+                        validateNotEmpty(val) || $t('validation.cannotBeEmpty'),
+                    ]"
+                    @update:model-value="saveChange('screenName')"
+                  >
+                    <template #append>
+                      <saved-notification
+                        :success="saved.screenName"
+                        :error="saved.error"
+                      />
+                    </template>
+                  </q-input>
 
-                <q-input
-                  v-if="
-                    features?.signup?.collectVehicleRegistrationPlate ||
-                    profileForm.vehicleRegistrationPlate
-                  "
-                  v-model="profileForm.vehicleRegistrationPlate"
-                  :disable="!features?.signup?.collectVehicleRegistrationPlate"
-                  outlined
-                  :debounce="debounceLength"
-                  :label="$t('form.vehicleRegistrationPlate')"
-                  :rules="[
-                    (val) => validateMax30(val) || $t('validation.max30'),
-                  ]"
-                  @update:model-value="saveChange('vehicleRegistrationPlate')"
-                >
-                  <template #append>
-                    <saved-notification
-                      :success="saved.vehicleRegistrationPlate"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-input>
+                  <q-input
+                    v-if="
+                      features?.signup?.collectVehicleRegistrationPlate ||
+                      profileForm.vehicleRegistrationPlate
+                    "
+                    v-model="profileForm.vehicleRegistrationPlate"
+                    :disable="
+                      !features?.signup?.collectVehicleRegistrationPlate
+                    "
+                    outlined
+                    hide-bottom-space
+                    :debounce="debounceLength"
+                    :label="$t('form.vehicleRegistrationPlate')"
+                    :rules="[
+                      (val) => validateMax30(val) || $t('validation.max30'),
+                    ]"
+                    @update:model-value="saveChange('vehicleRegistrationPlate')"
+                  >
+                    <template #append>
+                      <saved-notification
+                        :success="saved.vehicleRegistrationPlate"
+                        :error="saved.error"
+                      />
+                    </template>
+                  </q-input>
 
-                <h5 class="q-my-sm">
-                  {{ $t('adminTools.additionalDetails') }}
-                </h5>
+                  <h5 class="q-my-sm">
+                    {{ $t('adminTools.additionalDetails') }}
+                  </h5>
 
-                <q-input
-                  v-model="profileForm.memberNumber"
-                  outlined
-                  :debounce="debounceLength"
-                  :label="$t('form.memberNumber')"
-                  @update:model-value="saveChange('memberNumber')"
-                >
-                  <template #append>
-                    <saved-notification
-                      :success="saved.memberNumber"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-input>
+                  <q-input
+                    v-model="profileForm.memberNumber"
+                    outlined
+                    hide-bottom-space
+                    :debounce="debounceLength"
+                    :label="$t('form.memberNumber')"
+                    @update:model-value="saveChange('memberNumber')"
+                  >
+                    <template #append>
+                      <saved-notification
+                        :success="saved.memberNumber"
+                        :error="saved.error"
+                      />
+                    </template>
+                  </q-input>
 
-                <q-input
-                  v-model="profileForm.personnummer"
-                  outlined
-                  :debounce="debounceLength"
-                  :label="$t('form.personnummer')"
-                  @update:model-value="saveChange('personnummer')"
-                >
-                  <template #append>
-                    <saved-notification
-                      :success="saved.personnummer"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-input>
+                  <q-input
+                    v-model="profileForm.personnummer"
+                    outlined
+                    hide-bottom-space
+                    :debounce="debounceLength"
+                    :label="$t('form.personnummer')"
+                    @update:model-value="saveChange('personnummer')"
+                  >
+                    <template #append>
+                      <saved-notification
+                        :success="saved.personnummer"
+                        :error="saved.error"
+                      />
+                    </template>
+                  </q-input>
 
-                <q-input
-                  v-model="profileForm.streetAddress"
-                  outlined
-                  :debounce="debounceLength"
-                  :label="$t('form.streetAddress')"
-                  @update:model-value="saveChange('streetAddress')"
-                >
-                  <template #append>
-                    <saved-notification
-                      :success="saved.streetAddress"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-input>
+                  <q-input
+                    v-model="profileForm.streetAddress"
+                    outlined
+                    hide-bottom-space
+                    :debounce="debounceLength"
+                    :label="$t('form.streetAddress')"
+                    @update:model-value="saveChange('streetAddress')"
+                  >
+                    <template #append>
+                      <saved-notification
+                        :success="saved.streetAddress"
+                        :error="saved.error"
+                      />
+                    </template>
+                  </q-input>
 
-                <q-input
-                  v-model="profileForm.zipCode"
-                  outlined
-                  :debounce="debounceLength"
-                  :label="$t('form.zipCode')"
-                  @update:model-value="saveChange('zipCode')"
-                >
-                  <template #append>
-                    <saved-notification
-                      :success="saved.zipCode"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-input>
+                  <q-input
+                    v-model="profileForm.zipCode"
+                    outlined
+                    hide-bottom-space
+                    :debounce="debounceLength"
+                    :label="$t('form.zipCode')"
+                    @update:model-value="saveChange('zipCode')"
+                  >
+                    <template #append>
+                      <saved-notification
+                        :success="saved.zipCode"
+                        :error="saved.error"
+                      />
+                    </template>
+                  </q-input>
 
-                <q-input
-                  v-model="profileForm.city"
-                  outlined
-                  :debounce="debounceLength"
-                  :label="$t('form.city')"
-                  @update:model-value="saveChange('city')"
-                >
-                  <template #append>
-                    <saved-notification
-                      :success="saved.city"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-input>
+                  <q-input
+                    v-model="profileForm.city"
+                    outlined
+                    hide-bottom-space
+                    :debounce="debounceLength"
+                    :label="$t('form.city')"
+                    @update:model-value="saveChange('city')"
+                  >
+                    <template #append>
+                      <saved-notification
+                        :success="saved.city"
+                        :error="saved.error"
+                      />
+                    </template>
+                  </q-input>
 
-                <q-select
-                  v-model="profileForm.responsibleAdultId"
-                  outlined
-                  clearable
-                  emit-value
-                  map-options
-                  :options="responsibleAdultOptions"
-                  :label="$t('form.responsibleAdult')"
-                  @update:model-value="saveChange('responsibleAdultId')"
-                >
-                  <template #append>
-                    <saved-notification
-                      :success="saved.responsibleAdultId"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-select>
+                  <q-select
+                    v-model="profileForm.responsibleAdultId"
+                    outlined
+                    hide-bottom-space
+                    clearable
+                    emit-value
+                    map-options
+                    :options="responsibleAdultOptions"
+                    :label="$t('form.responsibleAdult')"
+                    @update:model-value="saveChange('responsibleAdultId')"
+                  >
+                    <template #append>
+                      <saved-notification
+                        :success="saved.responsibleAdultId"
+                        :error="saved.error"
+                      />
+                    </template>
+                  </q-select>
 
-                <q-input
-                  v-model="profileForm.lastYearlyMembershipPaidDate"
-                  type="date"
-                  outlined
-                  :debounce="debounceLength"
-                  :label="$t('form.lastYearlyMembershipPaidDate')"
-                  @update:model-value="
-                    saveChange('lastYearlyMembershipPaidDate')
-                  "
-                >
-                  <template #append>
-                    <saved-notification
-                      :success="saved.lastYearlyMembershipPaidDate"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-input>
+                  <q-input
+                    v-model="profileForm.memberMessage"
+                    type="textarea"
+                    outlined
+                    hide-bottom-space
+                    :debounce="debounceLength"
+                    :hint="$t('form.memberMessageHint')"
+                    :label="$t('form.memberMessage')"
+                    @update:model-value="saveChange('memberMessage')"
+                  >
+                    <template #append>
+                      <saved-notification
+                        :success="saved.memberMessage"
+                        :error="saved.error"
+                      />
+                    </template>
+                  </q-input>
 
-                <q-input
-                  v-model.number="profileForm.lastYearlyMembershipPaidAmount"
-                  type="number"
-                  step="0.01"
-                  outlined
-                  :debounce="debounceLength"
-                  :label="$t('form.lastYearlyMembershipPaidAmount')"
-                  @update:model-value="
-                    saveChange('lastYearlyMembershipPaidAmount')
-                  "
-                >
-                  <template #append>
-                    <saved-notification
-                      :success="saved.lastYearlyMembershipPaidAmount"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-input>
-
-                <q-input
-                  v-model="profileForm.memberMessage"
-                  type="textarea"
-                  outlined
-                  :debounce="debounceLength"
-                  :hint="$t('form.memberMessageHint')"
-                  :label="$t('form.memberMessage')"
-                  @update:model-value="saveChange('memberMessage')"
-                >
-                  <template #append>
-                    <saved-notification
-                      :success="saved.memberMessage"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-input>
-
-                <q-input
-                  v-model="profileForm.notes"
-                  type="textarea"
-                  outlined
-                  :debounce="debounceLength"
-                  :hint="$t('form.notesHint')"
-                  :label="$t('form.notes')"
-                  @update:model-value="saveChange('notes')"
-                >
-                  <template #append>
-                    <saved-notification
-                      :success="saved.notes"
-                      :error="saved.error"
-                    />
-                  </template>
-                </q-input>
+                  <q-input
+                    v-model="profileForm.notes"
+                    type="textarea"
+                    outlined
+                    hide-bottom-space
+                    :debounce="debounceLength"
+                    :hint="$t('form.notesHint')"
+                    :label="$t('form.notes')"
+                    @update:model-value="saveChange('notes')"
+                  >
+                    <template #append>
+                      <saved-notification
+                        :success="saved.notes"
+                        :error="saved.error"
+                      />
+                    </template>
+                  </q-input>
+                </div>
               </q-form>
             </div>
 
@@ -500,49 +482,12 @@
                 </q-item>
               </q-list>
 
-              <h5 class="q-mt-md q-mb-sm">
-                {{ $t('menuLink.memberbucks') }}
-              </h5>
-              <q-list bordered padding class="rounded-borders">
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1">
-                      {{
-                        $n(
-                          selectedMember.memberBucks.balance || 0,
-                          'currency',
-                          siteLocaleCurrency
-                        )
-                      }}
-                    </q-item-label>
-                    <q-item-label caption>
-                      {{ $t(`memberbucks.currentBalance`) }}
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item>
-                  <q-item-section>
-                    <q-item-label lines="1">
-                      {{
-                        selectedMember.memberBucks.lastPurchase
-                          ? formatDate(selectedMember.memberBucks.lastPurchase)
-                          : $t('error.noValue')
-                      }}
-                    </q-item-label>
-                    <q-item-label caption>
-                      {{ $t(`memberbucks.lastPurchase`) }}
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-
               <h5 class="q-mb-sm q-mt-md">
                 {{ $t('adminTools.memberDates') }}
               </h5>
               <q-list bordered padding class="rounded-borders">
                 <q-item
                   v-for="item in [
-                    'lastInduction',
                     'registrationDate',
                     'lastUpdatedProfile',
                     'lastSeen',
@@ -593,6 +538,52 @@
 
         <q-tab-panel name="billing">
           <div class="column flex content-start items-start q-gutter-y-lg">
+            <div
+              class="column q-gutter-y-sm full-width"
+              style="max-width: 350px"
+            >
+              <div class="text-h6">
+                {{ $t('adminTools.yearlyMembership') }}
+              </div>
+
+              <q-input
+                v-model="profileForm.lastYearlyMembershipPaidDate"
+                type="date"
+                outlined
+                hide-bottom-space
+                :debounce="debounceLength"
+                :label="$t('form.lastYearlyMembershipPaidDate')"
+                @update:model-value="saveChange('lastYearlyMembershipPaidDate')"
+              >
+                <template #append>
+                  <saved-notification
+                    :success="saved.lastYearlyMembershipPaidDate"
+                    :error="saved.error"
+                  />
+                </template>
+              </q-input>
+
+              <q-input
+                v-model.number="profileForm.lastYearlyMembershipPaidAmount"
+                type="number"
+                step="0.01"
+                outlined
+                hide-bottom-space
+                :debounce="debounceLength"
+                :label="$t('form.lastYearlyMembershipPaidAmount')"
+                @update:model-value="
+                  saveChange('lastYearlyMembershipPaidAmount')
+                "
+              >
+                <template #append>
+                  <saved-notification
+                    :success="saved.lastYearlyMembershipPaidAmount"
+                    :error="saved.error"
+                  />
+                </template>
+              </q-input>
+            </div>
+
             <div class="column q-gutter-y-sm full-width">
               <div class="text-h6">
                 {{ $t('adminTools.subscriptionInfo') }}
@@ -889,6 +880,50 @@
 
             <div class="column q-gutter-y-sm full-width">
               <div class="text-h6">
+                {{ $t('menuLink.memberbucks') }}
+              </div>
+
+              <q-list
+                bordered
+                padding
+                class="rounded-borders"
+                style="max-width: 350px"
+              >
+                <q-item>
+                  <q-item-section>
+                    <q-item-label lines="1">
+                      {{
+                        $n(
+                          selectedMember.memberBucks.balance || 0,
+                          'currency',
+                          siteLocaleCurrency
+                        )
+                      }}
+                    </q-item-label>
+                    <q-item-label caption>
+                      {{ $t(`memberbucks.currentBalance`) }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item>
+                  <q-item-section>
+                    <q-item-label lines="1">
+                      {{
+                        selectedMember.memberBucks.lastPurchase
+                          ? formatDate(selectedMember.memberBucks.lastPurchase)
+                          : $t('error.noValue')
+                      }}
+                    </q-item-label>
+                    <q-item-label caption>
+                      {{ $t(`memberbucks.lastPurchase`) }}
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </div>
+
+            <div class="column q-gutter-y-sm full-width">
+              <div class="text-h6">
                 {{ $t('adminTools.memberbucksTransactions') }}
               </div>
 
@@ -985,6 +1020,29 @@
           <div class="column q-gutter-y-sm full-width" style="max-width: 500px">
             <div class="text-h6">
               {{ $t('memberInductions.title') }}
+            </div>
+
+            <q-list bordered padding class="rounded-borders">
+              <q-item>
+                <q-item-section>
+                  <q-item-label lines="1">
+                    {{
+                      selectedMember.lastInduction
+                        ? formatDate(selectedMember.lastInduction)
+                        : $t('error.noValue')
+                    }}
+                  </q-item-label>
+                  <q-item-label caption>
+                    {{ $t('memberInductions.general') }}
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+
+            <q-separator class="q-my-sm" />
+
+            <div class="text-subtitle1">
+              {{ $t('memberInductions.stationsTitle') }}
             </div>
 
             <q-list
@@ -1727,50 +1785,61 @@ export default defineComponent({
       this.profileForm.screenName = this.selectedMember.screenName;
       this.profileForm.vehicleRegistrationPlate =
         this.selectedMember.vehicleRegistrationPlate;
-      this.profileForm.memberNumber = this.selectedMember.memberNumber;
-      this.profileForm.personnummer = this.selectedMember.personnummer;
-      this.profileForm.streetAddress = this.selectedMember.address?.street;
-      this.profileForm.zipCode = this.selectedMember.address?.zipCode;
-      this.profileForm.city = this.selectedMember.address?.city;
+      this.profileForm.memberNumber = this.selectedMember.memberNumber ?? '';
+      this.profileForm.personnummer = this.selectedMember.personnummer ?? '';
+      this.profileForm.streetAddress =
+        this.selectedMember.address?.street ?? '';
+      this.profileForm.zipCode = this.selectedMember.address?.zipCode ?? '';
+      this.profileForm.city = this.selectedMember.address?.city ?? '';
       this.profileForm.responsibleAdultId =
         this.selectedMember.responsibleAdult?.id ?? null;
       this.profileForm.lastYearlyMembershipPaidDate =
-        this.selectedMember.lastYearlyMembershipPaid?.date;
+        this.selectedMember.lastYearlyMembershipPaid?.date ?? '';
       this.profileForm.lastYearlyMembershipPaidAmount =
-        this.selectedMember.lastYearlyMembershipPaid?.amount;
-      this.profileForm.memberMessage = this.selectedMember.memberMessage;
-      this.profileForm.notes = this.selectedMember.notes;
+        this.selectedMember.lastYearlyMembershipPaid?.amount ?? null;
+      this.profileForm.memberMessage = this.selectedMember.memberMessage ?? '';
+      this.profileForm.notes = this.selectedMember.notes ?? '';
     },
     saveChange(field: keyof typeof this.saved) {
-      const formRef = this.$refs.formRef as typeof QForm;
+      // formRef only exists while the "profile" tab panel is mounted -
+      // fields on other tabs (e.g. billing) have no form to validate against
+      const formRef = this.$refs.formRef as typeof QForm | undefined;
+
+      if (!formRef) {
+        this.persistProfileChange(field);
+        return;
+      }
+
       formRef.validate(false).then(() => {
         formRef.validate(false).then((result: boolean) => {
           if (result) {
-            this.$axios
-              .put(`/api/admin/members/${this.member.id}/profile/`, {
-                ...this.profileForm,
-                excludeFromEmailExport:
-                  this.selectedMember.excludeFromEmailExport,
-              })
-              .then(() => {
-                this.saved.error = false;
-                this.saved[field as keyof typeof this.saved] = true;
-                this.$emit('memberUpdated');
-                setTimeout(() => {
-                  this.saved[field as keyof typeof this.saved] = false;
-                }, 1500);
-              })
-              .catch(() => {
-                this.saved.error = true;
-                this.saved[field as keyof typeof this.saved] = true;
-                setTimeout(() => {
-                  this.saved[field as keyof typeof this.saved] = false;
-                  this.saved.error = false;
-                }, 1500);
-              });
+            this.persistProfileChange(field);
           }
         });
       });
+    },
+    persistProfileChange(field: keyof typeof this.saved) {
+      this.$axios
+        .put(`/api/admin/members/${this.member.id}/profile/`, {
+          ...this.profileForm,
+          excludeFromEmailExport: this.selectedMember.excludeFromEmailExport,
+        })
+        .then(() => {
+          this.saved.error = false;
+          this.saved[field as keyof typeof this.saved] = true;
+          this.$emit('memberUpdated');
+          setTimeout(() => {
+            this.saved[field as keyof typeof this.saved] = false;
+          }, 1500);
+        })
+        .catch(() => {
+          this.saved.error = true;
+          this.saved[field as keyof typeof this.saved] = true;
+          setTimeout(() => {
+            this.saved[field as keyof typeof this.saved] = false;
+            this.saved.error = false;
+          }, 1500);
+        });
     },
     sendWelcomeEmail() {
       this.welcomeLoading = true;
