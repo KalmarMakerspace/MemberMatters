@@ -1,12 +1,15 @@
 import logging
+from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 from django.db.models import Count, Sum
+from django.db.models.functions import TruncDate
 from django.utils import timezone
 from prometheus_client import Gauge
 
 from api_metrics.models import Metric
 from profile.models import Profile
 from memberbucks.models import MemberBucks
+from access.models import DoorLog
 
 logger = logging.getLogger("celery:api_metrics")
 
@@ -161,3 +164,47 @@ def calculate_memberbucks_transactions():
             else [{"type": "stripe", "total": 0.0}]
         ),
     ).full_clean()
+
+
+def door_unique_members_daily(days, average_window=7):
+    """
+    Returns the number of unique members with a successful door swipe for each
+    day in the last `days` days (in the site time zone, MM_TIME_ZONE), along with
+    a rolling average over the previous `average_window` days. Computed directly
+    from DoorLog, so history is limited by the door log retention period.
+    """
+    today = timezone.localdate()
+    start = today - timedelta(days=days)
+    query_start = start - timedelta(days=average_window - 1)
+
+    counts = dict(
+        DoorLog.objects.filter(success=True, date__date__gte=query_start)
+        .annotate(day=TruncDate("date"))
+        .values("day")
+        .annotate(total=Count("user", distinct=True))
+        .values_list("day", "total")
+    )
+
+    daily_totals = [
+        counts.get(query_start + timedelta(days=i), 0)
+        for i in range((today - query_start).days + 1)
+    ]
+
+    data = []
+    for i in range(average_window - 1, len(daily_totals)):
+        window = daily_totals[i - average_window + 1 : i + 1]
+        day = query_start + timedelta(days=i)
+        data.append(
+            {
+                "date": day.isoformat(),
+                "data": [
+                    {"type": "unique_members", "total": daily_totals[i]},
+                    {
+                        "type": "unique_members_7d_avg",
+                        "total": round(sum(window) / average_window, 1),
+                    },
+                ],
+            }
+        )
+
+    return data

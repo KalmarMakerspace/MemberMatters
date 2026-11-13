@@ -112,6 +112,7 @@ export default {
     subscription_count_total: 'Status på abonnemang',
     memberbucks_balance_total: 'Spacebucks i omlopp',
     memberbucks_transactions_total: 'Spacebucks Transaktionsvolym',
+    door_unique_members_daily: 'Medlemmar i lokalen per dag',
     labels: {
       noob: 'Ny medlem',
       active: 'Aktiv medlem',
@@ -123,6 +124,8 @@ export default {
       interlock: 'Lås-betalningar',
       card: 'Swipe Card-betalningar',
       web: 'Online-betalningar',
+      unique_members: 'Antal medlemmar',
+      unique_members_7d_avg: 'Snitt 7 dagar',
     },
   },
   button: {
