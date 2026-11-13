@@ -22,6 +22,22 @@ export default {
       type: String,
       default: '',
     },
+    // Optional map of series key -> ApexCharts series type ('column' | 'line')
+    seriesTypes: {
+      type: Object,
+      default: () => ({}),
+    },
+    // Use a datetime x-axis (better for long daily series)
+    datetimeAxis: {
+      type: Boolean,
+      default: false,
+    },
+    // With datetimeAxis: initially zoom to the last N days (0 = show all).
+    // All data is still loaded, so users can zoom out / reset to see more.
+    defaultDays: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {};
@@ -35,16 +51,24 @@ export default {
     }, 0); // triggers on the next dom update
   },
   computed: {
+    hasColumns() {
+      return Object.values(this.seriesTypes).includes('column');
+    },
     options() {
-      return {
+      const options = {
         chart: {
           id: 'metrics-graph-' + this.id,
         },
-        xaxis: {
-          categories: this.metricsData.map((item) =>
-            this.formatDate(item.date)
-          ),
-        },
+        xaxis: this.datetimeAxis
+          ? {
+              type: 'datetime',
+              categories: this.metricsData.map((item) => item.date),
+            }
+          : {
+              categories: this.metricsData.map((item) =>
+                this.formatDate(item.date)
+              ),
+            },
         theme: {
           mode: this.$q.dark.isActive ? 'dark' : 'light',
         },
@@ -57,6 +81,35 @@ export default {
           },
         },
       };
+
+      if (this.datetimeAxis) {
+        options.tooltip = {
+          x: { format: 'yyyy-MM-dd' },
+          y: {
+            formatter: (val) =>
+              Number.isInteger(val) ? val : Number(val).toFixed(1),
+          },
+        };
+
+        const dates = this.metricsData.map((item) => item.date);
+        if (this.defaultDays > 0 && dates.length > this.defaultDays) {
+          const oneDay = 24 * 60 * 60 * 1000;
+          const last = new Date(dates[dates.length - 1]).getTime();
+          // half-day padding so the first/last bars aren't cut in half
+          options.xaxis.min = last - (this.defaultDays - 0.5) * oneDay;
+          options.xaxis.max = last + 0.5 * oneDay;
+        }
+      }
+
+      if (this.hasColumns) {
+        options.dataLabels = { enabled: false };
+        options.stroke = {
+          width: this.series.map((s) => (s.type === 'column' ? 0 : 3)),
+        };
+        options.plotOptions = { bar: { columnWidth: '90%' } };
+      }
+
+      return options;
     },
     series() {
       let states = {};
@@ -77,10 +130,14 @@ export default {
         }
       });
       return Object.keys(states).map((state) => {
-        return {
+        const series = {
           name: this.$t('stats.labels.' + state),
           data: states[state],
         };
+        if (this.seriesTypes[state]) {
+          series.type = this.seriesTypes[state];
+        }
+        return series;
       });
     },
   },

@@ -32,7 +32,11 @@
                     <div class="text-h6">{{ $t(`stats.${key}`) }}</div>
                   </div>
                   <div class="col-12 q-px-md q-pt-md">
-                    <MetricsGraph :metricsData="value" :id="key" />
+                    <MetricsGraph
+                      :metricsData="value"
+                      :id="key"
+                      v-bind="graphProps[key] || {}"
+                    />
                   </div>
                 </div>
               </q-card-section>
@@ -75,6 +79,18 @@ export default {
     ...mapGetters('config', ['features']),
     icons() {
       return icons;
+    },
+    graphProps() {
+      return {
+        door_unique_members_daily: {
+          seriesTypes: {
+            unique_members: 'column',
+            unique_members_7d_avg: 'line',
+          },
+          datetimeAxis: true,
+          defaultDays: 30,
+        },
+      };
     },
   },
 };
