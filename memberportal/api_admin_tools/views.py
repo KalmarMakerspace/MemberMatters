@@ -24,7 +24,14 @@ from memberbucks.models import (
     MemberBucks,
     MemberbucksProductPurchaseLog,
 )
-from profile.models import User, UserEventLog, Profile
+from profile.models import (
+    User,
+    UserEventLog,
+    Profile,
+    InductionStation,
+    MemberInduction,
+    reserve_member_number,
+)
 from services import sms
 from services.emails import send_email_to_admin
 from .models import MemberTier, PaymentPlan
@@ -583,12 +590,104 @@ class MemberProfile(APIView):
         member.profile.vehicle_registration_plate = body.get("vehicleRegistrationPlate")
         member.profile.exclude_from_email_export = body.get("excludeFromEmailExport")
 
+        member.profile.member_number = body.get("memberNumber")
+        member.profile.personnummer = body.get("personnummer")
+        member.profile.street_address = body.get("streetAddress")
+        member.profile.zip_code = body.get("zipCode")
+        member.profile.city = body.get("city")
+        member.profile.notes = body.get("notes")
+        member.profile.member_message = body.get("memberMessage")
+        member.profile.last_yearly_membership_paid_date = body.get(
+            "lastYearlyMembershipPaidDate"
+        )
+        member.profile.last_yearly_membership_paid_amount = body.get(
+            "lastYearlyMembershipPaidAmount"
+        )
+        member.profile.responsible_adult_id = body.get("responsibleAdultId") or None
+
         member.save()
         member.profile.save()
+
+        if member.profile.member_number:
+            reserve_member_number(member.profile.member_number)
 
         if rfid_changed:
             for door in member.profile.doors.all():
                 door.sync()
+
+        return Response()
+
+
+class Stations(APIView):
+    """
+    get: returns a list of induction stations.
+    post: creates a new induction station.
+    put: updates a specific induction station.
+    delete: deletes a specific induction station.
+    """
+
+    permission_classes = (permissions.IsAdminUser,)
+
+    def get(self, request):
+        stations = InductionStation.objects.all()
+
+        return Response([{"id": s.id, "name": s.name} for s in stations])
+
+    def post(self, request):
+        station = InductionStation.objects.create(name=request.data.get("name"))
+
+        return Response({"id": station.id, "name": station.name})
+
+    def put(self, request, station_id):
+        station = InductionStation.objects.get(pk=station_id)
+        station.name = request.data.get("name")
+        station.save()
+
+        return Response()
+
+    def delete(self, request, station_id):
+        InductionStation.objects.get(pk=station_id).delete()
+
+        return Response()
+
+
+class MemberInductions(APIView):
+    """
+    get: returns a member's list of inductions.
+    post: adds or updates a member's induction date for a station.
+    delete: removes a member's induction for a station.
+    """
+
+    permission_classes = (permissions.IsAdminUser,)
+
+    def get(self, request, member_id):
+        inductions = MemberInduction.objects.filter(member_id=member_id).select_related(
+            "station"
+        )
+
+        return Response(
+            [
+                {
+                    "id": induction.id,
+                    "stationId": induction.station_id,
+                    "stationName": induction.station.name,
+                    "date": induction.date,
+                }
+                for induction in inductions
+            ]
+        )
+
+    def post(self, request, member_id):
+        induction, _ = MemberInduction.objects.update_or_create(
+            member_id=member_id,
+            station_id=request.data.get("stationId"),
+            defaults={"date": request.data.get("date")},
+        )
+
+        return Response({"id": induction.id})
+
+    def delete(self, request, member_id, induction_id):
+        MemberInduction.objects.filter(member_id=member_id, pk=induction_id).delete()
 
         return Response()
 
@@ -954,7 +1053,9 @@ class ImportMembers(APIView):
     post: Import members from a CSV file.
 
     Required columns: email, first_name, last_name, screen_name
-    Optional columns: phone, rfid, state (noob/active/inactive/accountonly)
+    Optional columns: phone, rfid, state (noob/active/inactive/accountonly), member_number
+    (must not collide with an existing member's number; rows with a colliding
+    number are rejected)
 
     Existing members (matched by email) will be updated. New members are
     created with an unusable password (login via password reset only).
@@ -1004,6 +1105,7 @@ class ImportMembers(APIView):
             phone = row.get("phone", "").strip()
             rfid = row.get("rfid", "").strip() or None
             state = row.get("state", "noob").strip() or "noob"
+            member_number = row.get("member_number", "").strip() or None
 
             if not email:
                 errors.append({"row": i, "error": "Missing email."})
@@ -1016,6 +1118,19 @@ class ImportMembers(APIView):
             if state not in VALID_STATES:
                 errors.append(
                     {"row": i, "email": email, "error": f"Invalid state '{state}'."}
+                )
+                continue
+            if member_number and (
+                Profile.objects.filter(member_number=member_number)
+                .exclude(user__email=email)
+                .exists()
+            ):
+                errors.append(
+                    {
+                        "row": i,
+                        "email": email,
+                        "error": f"Member number '{member_number}' is already in use.",
+                    }
                 )
                 continue
 
@@ -1037,6 +1152,7 @@ class ImportMembers(APIView):
                         "phone": phone,
                         "rfid": rfid,
                         "state": state,
+                        "member_number": member_number,
                     },
                 )
                 if not _:
@@ -1047,8 +1163,13 @@ class ImportMembers(APIView):
                         profile.phone = phone
                     if rfid:
                         profile.rfid = rfid
+                    if member_number:
+                        profile.member_number = member_number
                     profile.state = state
                     profile.save()
+
+                if member_number:
+                    reserve_member_number(member_number)
 
                 if user_created:
                     created += 1

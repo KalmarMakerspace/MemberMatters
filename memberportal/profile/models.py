@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from django.utils import timezone
 from datetime import timedelta, datetime
 import pytz
@@ -11,6 +11,7 @@ from django.contrib.auth.models import (
 from django.core.validators import RegexValidator
 from django.conf import settings
 from constance import config
+from constance.backends.database.models import Constance as ConstanceSetting
 from api_general.models import SiteSession
 from api_admin_tools.models import PaymentPlan
 import json
@@ -298,6 +299,47 @@ class User(ExportModelOperationsMixin("user"), AbstractBaseUser, PermissionsMixi
         return True
 
 
+def get_next_member_number():
+    """
+    Atomically reserves and returns the next member number. The underlying counter is
+    only ever advanced, never reset from currently-assigned numbers, so a number is
+    never reused even after the member it was assigned to is deleted.
+    """
+    with transaction.atomic():
+        setting, _ = ConstanceSetting.objects.select_for_update().get_or_create(
+            key="NEXT_MEMBER_NUMBER", defaults={"value": 1}
+        )
+        next_number = setting.value
+        setting.value = next_number + 1
+        setting.save()
+
+    return str(next_number)
+
+
+def reserve_member_number(member_number):
+    """
+    Given a member number that was set explicitly (e.g. via import or manual entry),
+    advances the NEXT_MEMBER_NUMBER counter past it if needed, so a future
+    auto-assigned number never collides with it. Non-numeric member numbers are
+    ignored, since the counter only tracks the plain numeric sequence.
+    """
+    if not member_number:
+        return
+
+    try:
+        number = int(member_number)
+    except (TypeError, ValueError):
+        return
+
+    with transaction.atomic():
+        setting, _ = ConstanceSetting.objects.select_for_update().get_or_create(
+            key="NEXT_MEMBER_NUMBER", defaults={"value": 1}
+        )
+        if number >= setting.value:
+            setting.value = number + 1
+            setting.save()
+
+
 class Profile(ExportModelOperationsMixin("profile"), models.Model):
     STATES = (
         ("noob", "Needs Induction"),
@@ -345,6 +387,29 @@ class Profile(ExportModelOperationsMixin("profile"), models.Model):
     phone = models.CharField(validators=[phone_regex], max_length=12, blank=True)
     state = models.CharField(max_length=11, default="noob", choices=STATES)
     vehicle_registration_plate = models.CharField(max_length=30, blank=True, null=True)
+
+    member_number = models.CharField(
+        "Member Number", max_length=20, unique=True, null=True, blank=True
+    )
+    personnummer = models.CharField(
+        "Personnummer", max_length=20, blank=True, null=True
+    )
+    street_address = models.CharField(max_length=255, blank=True, null=True)
+    zip_code = models.CharField(max_length=20, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    responsible_adult = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="dependents",
+    )
+    notes = models.TextField(blank=True, null=True)
+    member_message = models.TextField(blank=True, null=True)
+    last_yearly_membership_paid_date = models.DateField(blank=True, null=True)
+    last_yearly_membership_paid_amount = models.DecimalField(
+        max_digits=8, decimal_places=2, blank=True, null=True
+    )
 
     membership_plan = models.ForeignKey(
         PaymentPlan,
@@ -531,6 +596,31 @@ class Profile(ExportModelOperationsMixin("profile"), models.Model):
             "state": self.state,
             "vehicleRegistrationPlate": self.vehicle_registration_plate,
             "rfid": self.rfid,
+            "memberNumber": self.member_number,
+            "personnummer": self.personnummer,
+            "address": {
+                "street": self.street_address,
+                "zipCode": self.zip_code,
+                "city": self.city,
+            },
+            "responsibleAdult": (
+                {
+                    "id": self.responsible_adult.id,
+                    "name": self.responsible_adult.profile.get_full_name(),
+                }
+                if self.responsible_adult
+                else None
+            ),
+            "notes": self.notes,
+            "memberMessage": self.member_message,
+            "lastYearlyMembershipPaid": {
+                "date": (
+                    self.last_yearly_membership_paid_date.strftime("%m/%d/%Y")
+                    if self.last_yearly_membership_paid_date
+                    else None
+                ),
+                "amount": self.last_yearly_membership_paid_amount,
+            },
             "memberBucks": {
                 "balance": self.memberbucks_balance,
                 "lastPurchase": (
@@ -661,3 +751,26 @@ class Profile(ExportModelOperationsMixin("profile"), models.Model):
             self.created = timezone.now()
         self.modified = timezone.now()
         return super(Profile, self).save(*args, **kwargs)
+
+
+class InductionStation(ExportModelOperationsMixin("induction_station"), models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
+class MemberInduction(ExportModelOperationsMixin("member_induction"), models.Model):
+    member = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="inductions"
+    )
+    station = models.ForeignKey(
+        InductionStation, on_delete=models.PROTECT, related_name="inductions"
+    )
+    date = models.DateField()
+
+    class Meta:
+        unique_together = ("member", "station")
+
+    def __str__(self):
+        return f"{self.member} - {self.station} ({self.date})"

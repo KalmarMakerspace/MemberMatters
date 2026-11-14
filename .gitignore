@@ -151,3 +151,5 @@ tmp/
 errors.log*
 
 setupcomplete
+
+.gradle
