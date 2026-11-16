@@ -4,15 +4,18 @@
     type="line"
     :options="options"
     :series="series"
+    @zoomed="onZoomed"
   ></apexchart>
 </template>
 
 <script>
-import formatMixin from 'src/mixins/formatMixin';
+import apexEn from 'apexcharts/dist/locales/en.json';
+import apexSe from 'apexcharts/dist/locales/se.json';
+
+const ONE_DAY = 24 * 60 * 60 * 1000;
 
 export default {
   name: 'MetricsGraph',
-  mixins: [formatMixin],
   props: {
     metricsData: {
       type: Array,
@@ -45,12 +48,67 @@ export default {
   mounted() {
     setTimeout(() => {
       const chart = ApexCharts.getChartByID('metrics-graph-' + this.id);
-      chart.hideSeries('Inactive Member');
-      chart.hideSeries('Account Only');
-      chart.hideSeries('New Member');
+      // series names are translated, so hide them by their translated name
+      ['inactive', 'accountonly', 'noob'].forEach((state) =>
+        chart.hideSeries(this.$t('stats.labels.' + state))
+      );
     }, 0); // triggers on the next dom update
   },
+  methods: {
+    // Short date in the user's language, e.g. "13 nov. 2026" / "13 Nov 2026"
+    formatAxisDate(date) {
+      return new Intl.DateTimeFormat(this.$i18n.locale, {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+      }).format(new Date(date));
+    },
+    // ApexCharts zooms out symmetrically around the centre, which pushes the
+    // view past the last date. vue3-apexcharts replaces options.chart.events
+    // (so beforeZoom can't be used), so instead we correct the range after
+    // the zoom. The corrected zoom is within bounds, so this doesn't loop.
+    onZoomed(chartContext, { xaxis } = {}) {
+      const bounds = this.dateBounds;
+      if (!bounds || !xaxis || xaxis.min == null || xaxis.max == null) return;
+
+      let { min, max } = xaxis;
+      if (max - min >= bounds.max - bounds.min) {
+        min = bounds.min;
+        max = bounds.max;
+      } else if (max > bounds.max) {
+        min -= max - bounds.max;
+        max = bounds.max;
+      } else if (min < bounds.min) {
+        max += bounds.min - min;
+        min = bounds.min;
+      }
+
+      // only re-zoom if the range actually changed (avoid float noise)
+      if (
+        Math.abs(min - xaxis.min) > 1000 ||
+        Math.abs(max - xaxis.max) > 1000
+      ) {
+        chartContext.zoomX(min, max);
+      }
+    },
+  },
   computed: {
+    // ApexCharts locale (axis month/day names, toolbar texts)
+    apexLocale() {
+      return String(this.$i18n.locale).toLowerCase().startsWith('sv')
+        ? 'se'
+        : 'en';
+    },
+    // First/last date as timestamps with half a day of padding, so the
+    // first and last bars aren't cut in half. Null without datetime data.
+    dateBounds() {
+      if (!this.datetimeAxis || this.metricsData.length === 0) return null;
+      const first = new Date(this.metricsData[0].date).getTime();
+      const last = new Date(
+        this.metricsData[this.metricsData.length - 1].date
+      ).getTime();
+      return { min: first - ONE_DAY / 2, max: last + ONE_DAY / 2 };
+    },
     hasColumns() {
       return Object.values(this.seriesTypes).includes('column');
     },
@@ -58,6 +116,8 @@ export default {
       const options = {
         chart: {
           id: 'metrics-graph-' + this.id,
+          locales: [apexEn, apexSe],
+          defaultLocale: this.apexLocale,
         },
         xaxis: this.datetimeAxis
           ? {
@@ -66,7 +126,7 @@ export default {
             }
           : {
               categories: this.metricsData.map((item) =>
-                this.formatDate(item.date)
+                this.formatAxisDate(item.date)
               ),
             },
         theme: {
@@ -91,13 +151,15 @@ export default {
           },
         };
 
-        const dates = this.metricsData.map((item) => item.date);
-        if (this.defaultDays > 0 && dates.length > this.defaultDays) {
-          const oneDay = 24 * 60 * 60 * 1000;
-          const last = new Date(dates[dates.length - 1]).getTime();
-          // half-day padding so the first/last bars aren't cut in half
-          options.xaxis.min = last - (this.defaultDays - 0.5) * oneDay;
-          options.xaxis.max = last + 0.5 * oneDay;
+        const bounds = this.dateBounds;
+        if (bounds) {
+          if (
+            this.defaultDays > 0 &&
+            this.metricsData.length > this.defaultDays
+          ) {
+            options.xaxis.min = bounds.max - this.defaultDays * ONE_DAY;
+            options.xaxis.max = bounds.max;
+          }
         }
       }
 
