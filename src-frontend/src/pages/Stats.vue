@@ -87,7 +87,6 @@ export default {
             unique_members: 'column',
             unique_members_7d_avg: 'line',
           },
-          datetimeAxis: true,
           defaultDays: 30,
         },
       };

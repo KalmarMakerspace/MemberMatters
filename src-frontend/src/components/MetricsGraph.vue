@@ -30,12 +30,7 @@ export default {
       type: Object,
       default: () => ({}),
     },
-    // Use a datetime x-axis (better for long daily series)
-    datetimeAxis: {
-      type: Boolean,
-      default: false,
-    },
-    // With datetimeAxis: initially zoom to the last N days (0 = show all).
+    // Initially zoom to the last N days (0 = show all).
     // All data is still loaded, so users can zoom out / reset to see more.
     defaultDays: {
       type: Number,
@@ -55,14 +50,6 @@ export default {
     }, 0); // triggers on the next dom update
   },
   methods: {
-    // Short date in the user's language, e.g. "13 nov. 2026" / "13 Nov 2026"
-    formatAxisDate(date) {
-      return new Intl.DateTimeFormat(this.$i18n.locale, {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-      }).format(new Date(date));
-    },
     // ApexCharts zooms out symmetrically around the centre, which pushes the
     // view past the last date. vue3-apexcharts replaces options.chart.events
     // (so beforeZoom can't be used), so instead we correct the range after
@@ -100,9 +87,9 @@ export default {
         : 'en';
     },
     // First/last date as timestamps with half a day of padding, so the
-    // first and last bars aren't cut in half. Null without datetime data.
+    // first and last bars aren't cut in half. Null when there is no data.
     dateBounds() {
-      if (!this.datetimeAxis || this.metricsData.length === 0) return null;
+      if (this.metricsData.length === 0) return null;
       const first = new Date(this.metricsData[0].date).getTime();
       const last = new Date(
         this.metricsData[this.metricsData.length - 1].date
@@ -119,16 +106,18 @@ export default {
           locales: [apexEn, apexSe],
           defaultLocale: this.apexLocale,
         },
-        xaxis: this.datetimeAxis
-          ? {
-              type: 'datetime',
-              categories: this.metricsData.map((item) => item.date),
-            }
-          : {
-              categories: this.metricsData.map((item) =>
-                this.formatAxisDate(item.date)
-              ),
-            },
+        // datetime axis: ApexCharts picks localized ticks (via the locale)
+        xaxis: {
+          type: 'datetime',
+          categories: this.metricsData.map((item) => item.date),
+        },
+        tooltip: {
+          x: { format: 'yyyy-MM-dd' },
+          y: {
+            formatter: (val) =>
+              Number.isInteger(val) ? val : Number(val).toFixed(1),
+          },
+        },
         theme: {
           mode: this.$q.dark.isActive ? 'dark' : 'light',
         },
@@ -142,25 +131,14 @@ export default {
         },
       };
 
-      if (this.datetimeAxis) {
-        options.tooltip = {
-          x: { format: 'yyyy-MM-dd' },
-          y: {
-            formatter: (val) =>
-              Number.isInteger(val) ? val : Number(val).toFixed(1),
-          },
-        };
-
-        const bounds = this.dateBounds;
-        if (bounds) {
-          if (
-            this.defaultDays > 0 &&
-            this.metricsData.length > this.defaultDays
-          ) {
-            options.xaxis.min = bounds.max - this.defaultDays * ONE_DAY;
-            options.xaxis.max = bounds.max;
-          }
-        }
+      const bounds = this.dateBounds;
+      if (
+        bounds &&
+        this.defaultDays > 0 &&
+        this.metricsData.length > this.defaultDays
+      ) {
+        options.xaxis.min = bounds.max - this.defaultDays * ONE_DAY;
+        options.xaxis.max = bounds.max;
       }
 
       if (this.hasColumns) {
