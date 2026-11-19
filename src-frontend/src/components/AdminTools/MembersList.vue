@@ -148,7 +148,10 @@
           <q-btn
             flat
             :label="$t('button.cancel')"
-            @click="importDialogOpen = false; importFile = null"
+            @click="
+              importDialogOpen = false;
+              importFile = null;
+            "
           />
           <q-btn
             color="primary"

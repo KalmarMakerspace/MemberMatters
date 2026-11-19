@@ -10,7 +10,7 @@ import json
 from django.utils.timezone import make_aware
 import datetime
 from pytz import UTC as utc
-from profile.models import User, Profile
+from profile.models import User, Profile, get_next_member_number
 
 from rest_framework import status, permissions, generics
 from rest_framework.response import Response
@@ -383,6 +383,7 @@ class ProfileDetail(generics.GenericAPIView):
             "phone": p.phone,
             "memberStatus": p.state,
             "vehicleRegistrationPlate": p.vehicle_registration_plate,
+            "message": p.member_message,
             "lastInduction": p.last_induction,
             "lastSeen": p.last_seen,
             "firstJoined": p.created,
@@ -667,6 +668,7 @@ class Register(APIView):
             screen_name=body.get("screenName"),
             phone=body.get("mobile"),
             vehicle_registration_plate=body.get("vehicleRegistrationPlate"),
+            member_number=get_next_member_number(),
         )
 
         profile.save()

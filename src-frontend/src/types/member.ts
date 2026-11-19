@@ -29,6 +29,25 @@ export const MemberProfileSchema = z.object({
   state: MemberStateSchema,
   vehicleRegistrationPlate: z.string(),
   rfid: z.string(),
+  memberNumber: z.string().nullable(),
+  personnummer: z.string().nullable(),
+  address: z.object({
+    street: z.string().nullable(),
+    zipCode: z.string().nullable(),
+    city: z.string().nullable(),
+  }),
+  responsibleAdult: z
+    .object({
+      id: z.number(),
+      name: z.string(),
+    })
+    .nullable(),
+  notes: z.string().nullable(),
+  memberMessage: z.string().nullable(),
+  lastYearlyMembershipPaid: z.object({
+    date: z.string().nullable(),
+    amount: z.number().nullable(),
+  }),
   memberBucks: z.object({
     balance: z.number(),
     lastPurchase: z.string().nullable(),
@@ -44,6 +63,20 @@ export const MemberProfileSchema = z.object({
 });
 
 export type MemberProfile = z.infer<typeof MemberProfileSchema>;
+
+export const StationSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+});
+export type Station = z.infer<typeof StationSchema>;
+
+export const MemberInductionSchema = z.object({
+  id: z.number(),
+  stationId: z.number(),
+  stationName: z.string(),
+  date: z.string(),
+});
+export type MemberInduction = z.infer<typeof MemberInductionSchema>;
 
 export enum MemberTransactionType {
   stripe = 'Stripe Top-up',

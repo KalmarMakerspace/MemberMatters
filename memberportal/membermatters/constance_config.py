@@ -20,6 +20,13 @@ CONSTANCE_CONFIG = {
         "",
         "A site wide banner that can display useful information. Leave empty to turn off.",
     ),
+    # Membership
+    "NEXT_MEMBER_NUMBER": (
+        1,
+        "The next member number that will be automatically assigned to a new member. "
+        "Only increase this manually (e.g. to skip ahead) - never decrease it, since member "
+        "numbers must never be reused.",
+    ),
     # Email config
     "EMAIL_SYSADMIN": (
         "example@example.com",
@@ -410,6 +417,7 @@ CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
                 "METRICS_INTERVAL",
             ),
         ),
+        ("Membership", ("NEXT_MEMBER_NUMBER",)),
         (
             "Features",
             (
