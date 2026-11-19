@@ -9,6 +9,9 @@ on:
 jobs:
   upload-docker-pr:
     runs-on: ubuntu-latest
+    permissions:
+      actions: read     # Required to download the artifact from the build run
+      packages: write   # Required for pushing to GHCR
     if: >
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success'
@@ -69,6 +72,8 @@ jobs:
   comment_docker_image:
     needs: upload-docker-pr
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write   # Required to comment on the PR
     steps:
       - name: Comment name of docker image
         id: comment_docker_image
