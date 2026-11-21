@@ -148,6 +148,13 @@ You cannot currently enable specific events, you either get "all or nothing".
   * "SITE_FAVICON" - a link to a square favicon style logo for use around the site.
   * "STATS_CARD_IMAGE" - a link to an image used as the background on the dashboard's statistics card.
 
+### Stats Settings
+  * "ENABLE_STATS_PAGE" - enable the stats page that shows member counts and other metrics.
+  * "STATS_MAX_DAYS" - the maximum number of days to show on the stats page.
+  * "ENABLE_STATS_MEMBER_TENURE" - show the member count graphs for members with more than 6 and 12 months of membership on the stats page.
+
+Note: the Spacebucks graphs on the stats page are only shown when "ENABLE_MEMBERBUCKS" is enabled.
+
 ### Group Localisation
   * "MEMBERBUCKS_NAME" - [Deprecated]
   * "GROUP_NAME" - [Deprecated]

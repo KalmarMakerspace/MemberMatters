@@ -395,6 +395,10 @@ CONSTANCE_CONFIG = {
         365,
         "The maximum number of days to show on the stats page.",
     ),
+    "ENABLE_STATS_MEMBER_TENURE": (
+        True,
+        "Show the member count graphs for members with more than 6 and 12 months of membership on the stats page.",
+    ),
     "ACCESS_LOG_RETENTION_DAYS": (
         730,
         "The number of days to keep door and interlock access logs. Older entries are deleted daily. Set to 0 to keep logs forever.",
@@ -434,7 +438,10 @@ CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
                 "ENABLE_DOOR_BUMP_API",
             ),
         ),
-        ("Stats Settings", ("ENABLE_STATS_PAGE", "STATS_MAX_DAYS")),
+        (
+            "Stats Settings",
+            ("ENABLE_STATS_PAGE", "STATS_MAX_DAYS", "ENABLE_STATS_MEMBER_TENURE"),
+        ),
         (
             "Sentry Error Reporting",
             (

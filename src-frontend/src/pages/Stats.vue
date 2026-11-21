@@ -19,7 +19,10 @@
 
       <template v-if="StatisticsLoaded">
         <template v-for="(value, key) in this.statistics" :key="key">
-          <div v-if="key !== 'on_site'" class="col-lg-6 col-12 q-px-md q-pt-md">
+          <div
+            v-if="key !== 'on_site' && !hiddenMetrics.includes(key)"
+            class="col-lg-6 col-12 q-px-md q-pt-md"
+          >
             <q-card class="full-width">
               <q-card-section>
                 <div class="row flex flex-center">
@@ -79,6 +82,22 @@ export default {
     ...mapGetters('config', ['features']),
     icons() {
       return icons;
+    },
+    hiddenMetrics() {
+      const hidden = [];
+      if (!this.features?.enableMemberBucks) {
+        hidden.push(
+          'memberbucks_balance_total',
+          'memberbucks_transactions_total'
+        );
+      }
+      if (this.features?.enableStatsMemberTenure === false) {
+        hidden.push(
+          'member_count_6_months_total',
+          'member_count_12_months_total'
+        );
+      }
+      return hidden;
     },
     graphProps() {
       return {

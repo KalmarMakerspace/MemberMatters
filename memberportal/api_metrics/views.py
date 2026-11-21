@@ -33,7 +33,28 @@ class Statistics(APIView):
 
         statistics["on_site"] = on_site
 
+        # Metrics hidden by feature flags (applies to admins too)
+        hidden_metrics = set()
+        if not config.ENABLE_MEMBERBUCKS:
+            hidden_metrics.update(
+                [
+                    Metric.MetricName.MEMBERBUCKS_BALANCE_TOTAL,
+                    Metric.MetricName.MEMBERBUCKS_TRANSACTIONS_TOTAL,
+                ]
+            )
+        if not config.ENABLE_STATS_MEMBER_TENURE:
+            hidden_metrics.update(
+                [
+                    Metric.MetricName.MEMBER_COUNT_6_MONTHS,
+                    Metric.MetricName.MEMBER_COUNT_12_MONTHS,
+                ]
+            )
+
         for metric_name in Metric.MetricName.values:
+            if metric_name in hidden_metrics:
+                statistics[metric_name] = []
+                continue
+
             # Don't return any data from the API if the stats page isn't enabled
             if config.ENABLE_STATS_PAGE or request.user.is_admin:
                 metric_data = []

@@ -61,6 +61,7 @@ class GetConfig(APIView):
                 "footer": config.SMS_FOOTER,
             },
             "enableStatsPage": config.ENABLE_STATS_PAGE,
+            "enableStatsMemberTenure": config.ENABLE_STATS_MEMBER_TENURE,
             "enableReportIssue": config.ENABLE_REPORT_ISSUE,
         }
 
