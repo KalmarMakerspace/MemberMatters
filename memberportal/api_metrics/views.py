@@ -61,6 +61,13 @@ class Statistics(APIView):
             else:
                 statistics[metric_name] = []
 
+        if config.ENABLE_STATS_PAGE or request.user.is_admin:
+            statistics["door_unique_members_daily"] = (
+                api_metrics.door_unique_members_daily(config.STATS_MAX_DAYS)
+            )
+        else:
+            statistics["door_unique_members_daily"] = []
+
         return Response(statistics)
 
 

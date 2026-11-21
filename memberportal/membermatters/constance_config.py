@@ -395,6 +395,10 @@ CONSTANCE_CONFIG = {
         365,
         "The maximum number of days to show on the stats page.",
     ),
+    "ACCESS_LOG_RETENTION_DAYS": (
+        730,
+        "The number of days to keep door and interlock access logs. Older entries are deleted daily. Set to 0 to keep logs forever.",
+    ),
 }
 
 CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
@@ -408,6 +412,7 @@ CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
                 "GOOGLE_ANALYTICS_MEASUREMENT_ID",
                 "SITE_BANNER",
                 "METRICS_INTERVAL",
+                "ACCESS_LOG_RETENTION_DAYS",
             ),
         ),
         (

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import {
+  DoorUniqueMembersDailySchema,
   MemberbucksBalanceTotalSchema,
   MemberbucksTransactionsTotalSchema,
   MemberCountTotalSchema,
@@ -15,6 +16,7 @@ export const MetricsApiSchema = z.object({
   subscription_count_total: z.array(SubscriptionCountTotalSchema),
   memberbucks_balance_total: z.array(MemberbucksBalanceTotalSchema),
   memberbucks_transactions_total: z.array(MemberbucksTransactionsTotalSchema),
+  door_unique_members_daily: z.array(DoorUniqueMembersDailySchema),
 });
 
 export type MetricsApi = z.infer<typeof MetricsApiSchema>;

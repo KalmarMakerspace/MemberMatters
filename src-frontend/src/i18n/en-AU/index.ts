@@ -118,6 +118,7 @@ export default {
     subscription_count_total: 'Subscription States',
     memberbucks_balance_total: 'Spacebucks In Circulation',
     memberbucks_transactions_total: 'Spacebucks Transaction Volume',
+    door_unique_members_daily: 'Unique Members At The Doors Per Day',
     labels: {
       noob: 'New Member',
       active: 'Active Member',
@@ -129,6 +130,8 @@ export default {
       interlock: 'Interlock Payment',
       card: 'Swipe Card Payment',
       web: 'Online Payment',
+      unique_members: 'Unique Members',
+      unique_members_7d_avg: '7-Day Average',
     },
   },
   button: {
