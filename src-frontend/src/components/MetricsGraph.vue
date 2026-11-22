@@ -36,16 +36,24 @@ export default {
       type: Number,
       default: 0,
     },
+    // Series keys (untranslated, e.g. 'inactive') to hide initially.
+    // Users can still toggle them on via the legend.
+    hiddenSeries: {
+      type: Array,
+      default: () => [],
+    },
   },
   data() {
     return {};
   },
   mounted() {
+    if (this.hiddenSeries.length === 0) return;
     setTimeout(() => {
       const chart = ApexCharts.getChartByID('metrics-graph-' + this.id);
+      if (!chart) return;
       // series names are translated, so hide them by their translated name
-      ['inactive', 'accountonly', 'noob'].forEach((state) =>
-        chart.hideSeries(this.$t('stats.labels.' + state))
+      this.hiddenSeries.forEach((key) =>
+        chart.hideSeries(this.$t('stats.labels.' + key))
       );
     }, 0); // triggers on the next dom update
   },
@@ -141,11 +149,13 @@ export default {
         options.xaxis.max = bounds.max;
       }
 
+      // same line width on every graph (columns have no stroke)
+      options.stroke = {
+        width: this.series.map((s) => (s.type === 'column' ? 0 : 3)),
+      };
+
       if (this.hasColumns) {
         options.dataLabels = { enabled: false };
-        options.stroke = {
-          width: this.series.map((s) => (s.type === 'column' ? 0 : 3)),
-        };
         options.plotOptions = { bar: { columnWidth: '90%' } };
       }
 

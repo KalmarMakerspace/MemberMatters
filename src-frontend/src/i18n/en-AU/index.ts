@@ -121,10 +121,10 @@ export default {
     door_unique_members_daily: 'Unique Members At The Doors Per Day',
     labels: {
       noob: 'New Member',
-      active: 'Active Member',
-      inactive: 'Inactive Member',
+      active: 'Active',
+      inactive: 'Inactive',
       accountonly: 'Account Only',
-      cancelling: 'Cancelling In Progress',
+      cancelling: 'Cancelling',
       stripe: 'Stripe Topup',
       other: 'Other Topup',
       interlock: 'Interlock Payment',

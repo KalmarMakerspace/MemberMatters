@@ -108,6 +108,9 @@ export default {
           },
           defaultDays: 30,
         },
+        subscription_count_total: {
+          hiddenSeries: ['inactive'],
+        },
       };
     },
   },
