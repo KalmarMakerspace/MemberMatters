@@ -152,15 +152,27 @@ export default {
       return options;
     },
     series() {
+      const keyOf = (entry) => entry?.state ?? entry?.type;
+
+      // collect every state/type key across all data points first, so each
+      // series gets one value per date (0 when missing) and stays aligned
+      // with the x-axis categories
+      const keys = [];
+      this.metricsData.forEach((item) => {
+        if (!Array.isArray(item.data)) return;
+        item.data.forEach((entry) => {
+          const key = keyOf(entry);
+          if (key && !keys.includes(key)) keys.push(key);
+        });
+      });
+
       let states = {};
-      this.metricsData.map((item) => {
+      keys.forEach((key) => (states[key] = []));
+      this.metricsData.forEach((item) => {
         if (Array.isArray(item.data)) {
-          item.data.forEach((state) => {
-            if (!state?.state && !state?.type) return;
-            if (states[state?.state ?? state?.type] === undefined) {
-              states[state?.state ?? state?.type] = [];
-            }
-            states[state?.state ?? state?.type].push(state.total);
+          keys.forEach((key) => {
+            const entry = item.data.find((e) => keyOf(e) === key);
+            states[key].push(entry ? entry.total : 0);
           });
         } else {
           if (states['value'] === undefined) {

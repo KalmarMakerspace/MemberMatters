@@ -114,9 +114,9 @@ export default {
     memberbucks_transactions_total: 'Spacebucks Transaktionsvolym',
     door_unique_members_daily: 'Medlemmar i lokalen per dag',
     labels: {
-      noob: 'Ny medlem',
-      active: 'Aktiv medlem',
-      inactive: 'Inaktiv medlem',
+      noob: 'Ny',
+      active: 'Aktiv',
+      inactive: 'Inaktiv',
       accountonly: 'Endast konto',
       cancelling: 'Avbryter',
       stripe: 'Stripe topup',

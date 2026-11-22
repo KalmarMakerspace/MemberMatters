@@ -110,22 +110,16 @@ def calculate_member_count_12_months():
 def calculate_subscription_count():
     # get the count of all the different subscription states
     logger.debug("Calculating subscription count total")
-    subscription_states_data = []
-    for state in (
-        Profile.objects.values("subscription_status")
-        .annotate(count=Count("pk"))
-        .order_by("count")
+    # always include every known state (with 0) so each one gets a graph series
+    counts = {state: 0 for state, _ in Profile.SUBSCRIPTION_STATES}
+    for state in Profile.objects.values("subscription_status").annotate(
+        count=Count("pk")
     ):
-        subscription_states_data.append(
-            {"state": state["subscription_status"], "total": state["count"]}
-        )
+        counts[state["subscription_status"]] = state["count"]
+
     Metric.objects.create(
         name=Metric.MetricName.SUBSCRIPTION_COUNT_TOTAL,
-        data=(
-            subscription_states_data
-            if len(subscription_states_data)
-            else [{"state": "inactive", "total": 0}]
-        ),
+        data=[{"state": state, "total": total} for state, total in counts.items()],
     ).full_clean()
 
 
