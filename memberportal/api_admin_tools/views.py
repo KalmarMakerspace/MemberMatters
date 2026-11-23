@@ -574,7 +574,20 @@ class MemberProfile(APIView):
         if member.profile.rfid != body.get("rfidCard"):
             rfid_changed = True
 
-        member.email = body.get("email")
+        new_email = (body.get("email") or "").strip().lower()
+        if not new_email:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        if User.objects.filter(email=new_email).exclude(id=member.id).exists():
+            return Response(
+                {"message": "error.accountAlreadyExists"},
+                status=status.HTTP_409_CONFLICT,
+            )
+
+        old_email = member.email
+        email_changed = new_email != old_email
+
+        member.email = new_email
         member.profile.first_name = body.get("firstName")
         member.profile.last_name = body.get("lastName")
         member.profile.rfid = body.get("rfidCard")
@@ -585,6 +598,25 @@ class MemberProfile(APIView):
 
         member.save()
         member.profile.save()
+
+        if email_changed:
+            member.log_event(
+                f"Email changed from {old_email} to {new_email} by {request.user.email}.",
+                "profile",
+            )
+
+            if config.ENABLE_STRIPE and member.profile.stripe_customer_id:
+                try:
+                    stripe.api_key = config.STRIPE_SECRET_KEY
+                    stripe.Customer.modify(
+                        member.profile.stripe_customer_id, email=new_email
+                    )
+                except Exception as e:
+                    # don't block the local change if Stripe fails
+                    capture_exception(e)
+                    member.log_event(
+                        "Failed to update email on Stripe customer.", "stripe"
+                    )
 
         if rfid_changed:
             for door in member.profile.doors.all():

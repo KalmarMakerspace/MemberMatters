@@ -275,6 +275,7 @@ export default {
     intervalCount: 'Interval Count',
     interval: 'Interval Period',
     vehicleRegistrationPlate: 'Vehicle Registration Plate Number',
+    emailChangeNote: 'Contact staff if you need to change your email address.',
     vehicleRegistrationNote:
       'Please enter your vehicle registration plate if you have any. Separate multiple with a space. We use this to help manage parking.',
     excludeFromEmailExport: 'Excluded from email exports',

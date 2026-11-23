@@ -417,19 +417,11 @@ class ProfileDetail(generics.GenericAPIView):
     def put(self, request):
         p = request.user.profile
         body = json.loads(request.body)
-        email = body.get("email").lower()
         screen_name = body.get("screenName").lower()
 
-        # check if email is specified
-        if not email:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        # check if email is already in use
-        if User.objects.filter(email=email).exists() and email != request.user.email:
-            return Response(
-                {"message": "error.accountAlreadyExists"},
-                status=status.HTTP_409_CONFLICT,
-            )
+        # Members can't change their own email address (it's the login username
+        # and is shared with Stripe/SSO). Staff change it via the admin tools.
+        # Any "email" in the request body is ignored.
 
         # check if screen name is already in use
         if (
@@ -441,14 +433,12 @@ class ProfileDetail(generics.GenericAPIView):
                 status=status.HTTP_409_CONFLICT,
             )
 
-        request.user.email = body.get("email")
         p.first_name = body.get("firstName")
         p.last_name = body.get("lastName")
         p.phone = body.get("phone")
         p.screen_name = body.get("screenName")
         p.vehicle_registration_plate = body.get("vehicleRegistrationPlate")
 
-        request.user.save()
         p.save()
 
         return Response({"success": True})

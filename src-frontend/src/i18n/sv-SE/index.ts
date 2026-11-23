@@ -268,6 +268,7 @@ export default {
     intervalCount: 'Intervall antal',
     interval: 'Intervall period',
     vehicleRegistrationPlate: 'Registreringsnummer på fordon',
+    emailChangeNote: 'Kontakta oss om du behöver ändra din e-postadress.',
     vehicleRegistrationNote:
       'Fyll i ditt fordons registreringsnummer. Ange flera med mellanslag emellean. Vi använder detta för att hantera parkering.',
     excludeFromEmailExport: 'Uteslut från email export',
