@@ -47,3 +47,12 @@ export const MemberbucksTransactionsTotalSchema = z.object({
 export type MemberbucksTransactionsTotal = z.infer<
   typeof MemberbucksTransactionsTotalSchema
 >;
+
+export const DoorUniqueMembersDailySchema = z.object({
+  date: z.string(),
+  data: z.array(z.object({ type: z.string(), total: z.number() })),
+});
+
+export type DoorUniqueMembersDaily = z.infer<
+  typeof DoorUniqueMembersDailySchema
+>;

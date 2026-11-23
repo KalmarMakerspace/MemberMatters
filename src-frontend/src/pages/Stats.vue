@@ -19,7 +19,10 @@
 
       <template v-if="StatisticsLoaded">
         <template v-for="(value, key) in this.statistics" :key="key">
-          <div v-if="key !== 'on_site'" class="col-lg-6 col-12 q-px-md q-pt-md">
+          <div
+            v-if="key !== 'on_site' && !hiddenMetrics.includes(key)"
+            class="col-lg-6 col-12 q-px-md q-pt-md"
+          >
             <q-card class="full-width">
               <q-card-section>
                 <div class="row flex flex-center">
@@ -32,7 +35,11 @@
                     <div class="text-h6">{{ $t(`stats.${key}`) }}</div>
                   </div>
                   <div class="col-12 q-px-md q-pt-md">
-                    <MetricsGraph :metricsData="value" :id="key" />
+                    <MetricsGraph
+                      :metricsData="value"
+                      :id="key"
+                      v-bind="graphProps[key] || {}"
+                    />
                   </div>
                 </div>
               </q-card-section>
@@ -75,6 +82,36 @@ export default {
     ...mapGetters('config', ['features']),
     icons() {
       return icons;
+    },
+    hiddenMetrics() {
+      const hidden = [];
+      if (!this.features?.enableMemberBucks) {
+        hidden.push(
+          'memberbucks_balance_total',
+          'memberbucks_transactions_total'
+        );
+      }
+      if (this.features?.enableStatsMemberTenure === false) {
+        hidden.push(
+          'member_count_6_months_total',
+          'member_count_12_months_total'
+        );
+      }
+      return hidden;
+    },
+    graphProps() {
+      return {
+        door_unique_members_daily: {
+          seriesTypes: {
+            unique_members: 'column',
+            unique_members_7d_avg: 'line',
+          },
+          defaultDays: 30,
+        },
+        subscription_count_total: {
+          hiddenSeries: ['inactive'],
+        },
+      };
     },
   },
 };

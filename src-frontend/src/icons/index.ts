@@ -82,4 +82,5 @@ export default {
   subscription_count_total: 'mdi-receipt',
   memberbucks_balance_total: 'mdi-wallet',
   memberbucks_transactions_total: 'mdi-wallet',
+  door_unique_members_daily: 'mdi-door-open',
 };
