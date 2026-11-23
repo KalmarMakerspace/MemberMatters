@@ -946,6 +946,8 @@ class ManageSettings(APIView):
 
 IMPORT_REQUIRED_COLUMNS = {"email", "first_name", "last_name", "screen_name"}
 IMPORT_OPTIONAL_COLUMNS = {"phone", "rfid", "state"}
+# "accountonly" is intentionally allowed here regardless of the
+# ENABLE_ACCOUNT_ONLY_SIGNUP setting, which only gates member self-service.
 VALID_STATES = {"noob", "active", "inactive", "accountonly"}
 
 

@@ -46,6 +46,7 @@ class GetConfig(APIView):
             "enableMembershipPayments": config.ENABLE_STRIPE
             and config.ENABLE_STRIPE_MEMBERSHIP_PAYMENTS,
             "enableMemberBucks": config.ENABLE_MEMBERBUCKS,
+            "enableAccountOnlySignup": config.ENABLE_ACCOUNT_ONLY_SIGNUP,
             "signup": {
                 "inductionLink": config.INDUCTION_ENROL_LINK,
                 "requireAccessCard": config.REQUIRE_ACCESS_CARD,

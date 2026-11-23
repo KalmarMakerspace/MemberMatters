@@ -17,7 +17,7 @@
       </q-banner>
 
       <q-banner
-        v-if="profile.memberStatus === 'Account Only'"
+        v-if="profile.memberStatus === 'accountonly'"
         inline-actions
         rounded
         class="bg-blue text-white q-ma-md"

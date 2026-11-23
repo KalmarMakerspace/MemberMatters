@@ -120,6 +120,10 @@ CONSTANCE_CONFIG = {
         False,
         "Enable integration with stripe for membership payments.",
     ),
+    "ENABLE_ACCOUNT_ONLY_SIGNUP": (
+        True,
+        "Allow members to skip the membership plan signup and keep an 'account only' user account.",
+    ),
     # ==== Report Issue Services ====
     "ENABLE_REPORT_ISSUE": (
         False,
@@ -457,6 +461,7 @@ CONSTANCE_CONFIG_FIELDSETS = OrderedDict(
                 "MIN_INDUCTION_SCORE",
                 "REQUIRE_ACCESS_CARD",
                 "COLLECT_VEHICLE_REGISTRATION_PLATE",
+                "ENABLE_ACCOUNT_ONLY_SIGNUP",
             ),
         ),
         (

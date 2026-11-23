@@ -4,7 +4,7 @@
 
     <div class="column flex content-start justify-center">
       <q-banner
-        v-if="profile.memberStatus === 'Account Only'"
+        v-if="profile.memberStatus === 'accountonly'"
         inline-actions
         rounded
         class="bg-blue text-white q-ma-md"
@@ -195,7 +195,7 @@
         </div>
       </q-step>
     </q-stepper>
-    <div class="text-center">
+    <div v-if="features.enableAccountOnlySignup" class="text-center">
       <p
         @click="skipSignup"
         style="text-decoration: underline; cursor: pointer"
@@ -230,7 +230,7 @@ export default defineComponent({
   },
   computed: {
     ...mapGetters('profile', ['loggedIn', 'profile']),
-    ...mapGetters('config', ['siteLocaleCurrency']),
+    ...mapGetters('config', ['siteLocaleCurrency', 'features']),
     icons() {
       return icons;
     },

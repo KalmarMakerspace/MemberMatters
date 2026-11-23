@@ -477,6 +477,9 @@ class SkipSignup(APIView):
     """
 
     def post(self, request):
+        if not config.ENABLE_ACCOUNT_ONLY_SIGNUP:
+            return Response({"success": False}, status=status.HTTP_403_FORBIDDEN)
+
         request.user.profile.set_account_only()
 
         return Response({"success": True})
