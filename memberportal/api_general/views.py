@@ -7,6 +7,7 @@ from django.contrib.auth import (
 import logging
 from constance import config
 import json
+from django.db import DatabaseError, transaction
 from django.utils.timezone import make_aware
 import datetime
 from pytz import UTC as utc
@@ -653,26 +654,40 @@ class Register(APIView):
                 status=status.HTTP_409_CONFLICT,
             )
 
-        new_user = User.objects.create(
-            email=body.get("email").lower(),
-            email_verified=False,
-        )
+        # Create the user, profile and verification token in one transaction so
+        # a failure (e.g. a too long value) can't leave a user without a profile.
+        try:
+            with transaction.atomic():
+                new_user = User.objects.create(
+                    email=body.get("email").lower(),
+                    email_verified=False,
+                )
 
-        new_user.set_password(body.get("password"))
-        new_user.save()
+                new_user.set_password(body.get("password"))
+                new_user.save()
 
-        profile = Profile.objects.create(
-            user=new_user,
-            first_name=body.get("firstName"),
-            last_name=body.get("lastName"),
-            screen_name=body.get("screenName"),
-            phone=body.get("mobile"),
-            vehicle_registration_plate=body.get("vehicleRegistrationPlate"),
-        )
+                profile = Profile.objects.create(
+                    user=new_user,
+                    first_name=body.get("firstName"),
+                    last_name=body.get("lastName"),
+                    screen_name=body.get("screenName"),
+                    phone=body.get("mobile"),
+                    vehicle_registration_plate=body.get("vehicleRegistrationPlate"),
+                )
 
-        profile.save()
+                profile.save()
 
-        verification_token = EmailVerificationToken.objects.create(user=new_user)
+                verification_token = EmailVerificationToken.objects.create(
+                    user=new_user
+                )
+        except DatabaseError:
+            logger.exception(
+                f"Failed to register new member with email {body.get('email')}"
+            )
+            return Response(
+                {"message": "error.contactUs"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
         url = f"{config.SITE_URL}/profile/email/{verification_token.verification_token}/verify/"
         verification_token.user.email_link(
