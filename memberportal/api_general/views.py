@@ -464,17 +464,6 @@ class ApiPassword(APIView):
         return Response(status=status.HTTP_403_FORBIDDEN)
 
 
-class DigitalId(APIView):
-    """
-    get: retrieves the user's digital id token.
-    """
-
-    def get(self, request):
-        return Response(
-            {"success": True, "token": request.user.profile.generate_digital_id_token()}
-        )
-
-
 class Kiosks(APIView):
     """
     get: retrieves a list of all kiosks.

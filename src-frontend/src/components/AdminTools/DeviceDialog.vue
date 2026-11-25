@@ -627,7 +627,7 @@ export default {
         columns = [
           {
             name: 'name',
-            label: this.$t('digitalId.fullName'),
+            label: this.$t('tableHeading.name'),
             field: 'full_name',
             sortable: true,
           },
@@ -655,7 +655,7 @@ export default {
         columns = [
           {
             name: 'name',
-            label: this.$t('digitalId.fullName'),
+            label: this.$t('tableHeading.name'),
             field: 'full_name',
             sortable: true,
           },
@@ -683,7 +683,7 @@ export default {
         columns = [
           {
             name: 'name',
-            label: this.$t('digitalId.fullName'),
+            label: this.$t('tableHeading.name'),
             field: 'full_name',
             sortable: true,
           },

@@ -27,7 +27,6 @@ urlpatterns = [
     path("api/logout/", views.Logout.as_view(), name="api_logout"),
     path("api/profile/", views.ProfileDetail.as_view(), name="api_profile"),
     path("api/profile/password/", views.ApiPassword.as_view(), name="api_password"),
-    path("api/profile/idtoken/", views.DigitalId.as_view(), name="api_digital_id"),
     path("api/kiosks/", views.Kiosks.as_view(), name="api_kiosks"),
     path(
         "api/sitesessions/signin/", views.SiteSignIn.as_view(), name="api_site_sign_in"
