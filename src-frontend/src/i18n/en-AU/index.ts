@@ -275,17 +275,10 @@ export default {
     intervalCount: 'Interval Count',
     interval: 'Interval Period',
     vehicleRegistrationPlate: 'Vehicle Registration Plate Number',
+    emailChangeNote: 'Contact staff if you need to change your email address.',
     vehicleRegistrationNote:
       'Please enter your vehicle registration plate if you have any. Separate multiple with a space. We use this to help manage parking.',
     excludeFromEmailExport: 'Excluded from email exports',
-  },
-  digitalId: {
-    title: 'Digital ID',
-    fullName: 'Full Name',
-    memberState: 'Member Status',
-    memberId: 'Member ID',
-    memberSince: 'Member Since',
-    inactiveMember: 'This person is not an active member.',
   },
   meetings: {
     memberName: 'Member Name',

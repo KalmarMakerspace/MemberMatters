@@ -4,19 +4,11 @@
       <q-input
         v-model="form.email"
         outlined
-        :debounce="debounceLength"
+        readonly
         :label="$t('form.email')"
-        :rules="[(val) => validateEmail(val) || $t('validation.invalidEmail')]"
-        @update:model-value="saveChange('email')"
-      >
-        <template v-slot:append>
-          <saved-notification
-            :success="saved.email"
-            show-text
-            :error="saved.error"
-          />
-        </template>
-      </q-input>
+        :hint="$t('form.emailChangeNote')"
+        class="q-mb-md"
+      />
 
       <q-input
         v-model="form.firstName"

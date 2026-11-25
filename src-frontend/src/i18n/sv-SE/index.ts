@@ -200,7 +200,7 @@ export default {
   access: {
     pageDescription:
       'Dina rättigheter för åtkomst visas nedan. Kontakta oss om de behöver uppdateras.',
-    inactive: 'Medlemskapet är inaktivt. Detta kan påverka din åtkomst.',
+    inactive: 'Medlemskapet är inaktivt',
     authorised: 'Behörig',
     unauthorised: 'Åtkomst saknas',
     maintenance: 'Underhåll pågår',
@@ -268,17 +268,10 @@ export default {
     intervalCount: 'Intervall antal',
     interval: 'Intervall period',
     vehicleRegistrationPlate: 'Registreringsnummer på fordon',
+    emailChangeNote: 'Kontakta oss om du behöver ändra din e-postadress.',
     vehicleRegistrationNote:
       'Fyll i ditt fordons registreringsnummer. Ange flera med mellanslag emellean. Vi använder detta för att hantera parkering.',
     excludeFromEmailExport: 'Uteslut från email export',
-  },
-  digitalId: {
-    title: 'Digitalt ID',
-    fullName: 'Fullständigt namn',
-    memberState: 'Medlemsstatus',
-    memberId: 'Medlems-ID',
-    memberSince: 'Medlem sedan',
-    inactiveMember: 'Denna person är inte en aktiv medlem.',
   },
   meetings: {
     memberName: 'Medlemmens namn',

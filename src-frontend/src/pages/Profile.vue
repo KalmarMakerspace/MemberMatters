@@ -17,7 +17,7 @@
       </q-banner>
 
       <q-banner
-        v-if="profile.memberStatus === 'Account Only'"
+        v-if="profile.memberStatus === 'accountonly'"
         inline-actions
         rounded
         class="bg-blue text-white q-ma-md"
@@ -31,24 +31,12 @@
 
     <profile-form class="q-mb-lg" />
 
-    <q-btn-group push>
-      <q-btn
-        push
-        color="toolbar"
-        label="Digital ID"
-        @click="digitalId = true"
-      />
-      <q-btn
-        push
-        color="primary"
-        label="Change Password"
-        @click="changePassword = true"
-      />
-    </q-btn-group>
-
-    <q-dialog v-model="digitalId">
-      <digital-id-card />
-    </q-dialog>
+    <q-btn
+      push
+      color="primary"
+      :label="$t('changePasswordCard.pageTitle')"
+      @click="changePassword = true"
+    />
 
     <q-dialog v-model="changePassword">
       <change-password-card />
@@ -59,17 +47,15 @@
 <script>
 import ProfileForm from '@components/ProfileForm.vue';
 import icons from '../icons';
-import DigitalIdCard from '@components/DigitalIdCard.vue';
 import ChangePasswordCard from '@components/ChangePasswordCard.vue';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'ProfilePage',
-  components: { ChangePasswordCard, DigitalIdCard, ProfileForm },
+  components: { ChangePasswordCard, ProfileForm },
   data() {
     return {
       text: '',
-      digitalId: false,
       changePassword: false,
     };
   },
